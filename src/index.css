@@ -1,44 +1,59 @@
-/* 1) RESET + BOX-SIZING */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* ========================================
+   Global Styles (src/styles/globals.css)
+   ======================================== */
 
-/* 2) TYPOGRAPHY BASE */
+/* ==== 1) VARIABLES Y THEME ==== */
 :root {
+  /* Tipografía base */
   --font-family-base: system-ui, Avenir, Helvetica, Arial, sans-serif;
   --line-height-base: 1.5;
   --font-weight-base: 400;
+
+  /* Colores light/dark */
+  --color-bg-light:  #ffffff;
+  --color-bg-dark:   #242424;
   --color-text-light: rgba(255,255,255,0.87);
-  --color-text-dark: #213547;
-  --color-bg-light: #242424;
-  --color-bg-dark: #ffffff;
-  --color-primary: #646cff;
+  --color-text-dark:  #213547;
+
+  /* Variables de uso */
+  --color-bg:   var(--color-bg-light);
+  --color-text: var(--color-text-dark);
+
+  /* Paleta primaria */
+  --color-primary:       #646cff;
   --color-primary-hover: #535bf2;
+
   --transition-fast: 0.25s;
 }
 
+/* Dark mode override */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:   var(--color-bg-dark);
+    --color-text: var(--color-text-light);
+  }
+}
+
+/* ==== 2) RESET LIGHT / DARK ==== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  display: flex;
+}
+
+/* ==== 3) TIPOGRAFÍA BASE ==== */
 html {
   font-family: var(--font-family-base);
   line-height: var(--line-height-base);
   font-weight: var(--font-weight-base);
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  color-scheme: light dark;
 }
 
-body {
-  min-height: 100vh;
-  background-color: var(--color-bg-light);
-  color: var(--color-text-light);
-  display: flex;
-  place-items: start;
-  min-width: 320px;
-}
-
-/* 3) TIPOS DE ELEMENTOS COMUNES */
+/* ==== 4) ELEMENTOS COMUNES ==== */
 a {
   color: var(--color-primary);
   font-weight: 500;
@@ -54,10 +69,13 @@ button,
 input,
 textarea,
 select {
-  font: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
   background: none;
   border: none;
   outline: none;
+  color: inherit;
 }
 
 button {
@@ -72,10 +90,15 @@ button:focus-visible {
   border-color: var(--color-primary);
 }
 
-/* 4) MULTIMEDIA & LAYOUT */
-img, picture, video, canvas, svg {
+/* ==== 5) MULTIMEDIA & LAYOUT ==== */
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
+  height: auto;
 }
 
 table {
@@ -83,25 +106,29 @@ table {
   width: 100%;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-/* 5) TIPOS DE TITULARES Y TEXTOS */
-h1, h2, h3, h4, h5, h6, p {
+/* ==== 6) CABECERAS Y TEXTOS ==== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 0;
 }
-h1 { font-size: 3.2em; line-height: 1.1; }
-
-/* 6) DARK / LIGHT THEME SWITCH */
-@media (prefers-color-scheme: light) {
-  body {
-    background-color: var(--color-bg-dark);
-    color: var(--color-text-dark);
-  }
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
 }
 
-/* 7) OPTIONAL: normalize form elements in Firefox */
+/* ==== 7) FIREFOX FORM NORMALIZE ==== */
 ::-moz-focus-inner {
   border: 0;
 }
