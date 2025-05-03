@@ -1,4 +1,3 @@
-import { TextErrors } from "@/components/TextErrors";
 import { useForm } from "@/hooks";
 import {
   Avatar,
@@ -190,9 +189,6 @@ const Login = () => {
           >
             {loadingSubmit ? "Iniciando sesión..." : "Iniciar sesión"}
           </StyledButton>
-
-          {/* Muestra errores del formulario */}
-          <TextErrors errors={formLogin.errors} />
 
           <Box
             display="flex"
