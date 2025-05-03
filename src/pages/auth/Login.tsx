@@ -1,3 +1,5 @@
+import { TextErrors } from "@/components/TextErrors";
+import { useForm } from "@/hooks";
 import {
   Avatar,
   Box,
@@ -9,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useState } from "react";
 
 const StyledContainer = styled(Container)(() => ({
   height: "100vh",
@@ -49,14 +52,24 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-const StyledButton = styled(Button)(({ theme }) => ({
+interface StyledButtonProps {
+  loadingButton?: boolean;
+}
+
+const StyledButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "loadingButton",
+})<StyledButtonProps>(({ theme, loadingButton }) => ({
   margin: theme.spacing(2, 0),
   padding: theme.spacing(1.2),
   borderRadius: 50,
-  backgroundColor: "rgba(255, 247, 237, 0.9)",
-  color: "#e17055",
+  backgroundColor: loadingButton
+    ? theme.palette.action.disabledBackground
+    : "rgba(255, 247, 237, 0.9)",
+  color: loadingButton ? theme.palette.action.disabled : "#e17055",
   "&:hover": {
-    backgroundColor: "rgba(255, 247, 237, 1)",
+    backgroundColor: loadingButton
+      ? theme.palette.action.disabledBackground
+      : "rgba(255, 247, 237, 1)",
   },
 }));
 
@@ -68,7 +81,58 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   height: 56,
 }));
 
+const initialValues = {
+  email: "",
+  password: "",
+};
+
+type InitialValues = typeof initialValues;
+
+const validate = (
+  values: typeof initialValues
+): Partial<Record<keyof typeof initialValues, string>> => {
+  const errors: Partial<Record<keyof typeof initialValues, string>> = {};
+  if (!values.email) {
+    errors.email = "El email es requerido";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+    errors.email = "Por favor ingresa un email válido";
+  }
+  if (!values.password) {
+    errors.password = "La contraseña es requerida";
+  }
+  if (values.password.length < limitLengthPassword) {
+    errors.password = `La contraseña debe tener al menos ${limitLengthPassword} caracteres`;
+  }
+
+  return errors;
+};
+const limitLengthPassword = 8;
 const Login = () => {
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const formLogin = useForm({ initialValues, validate });
+
+  const onSubmitLogin = async (values: InitialValues) => {
+    setLoadingSubmit(true);
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await response.json();
+      console.log("Success:", data);
+      return data;
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoadingSubmit(false);
+    }
+  };
+
+  console.log("formLogin", formLogin.values, loadingSubmit);
+
   return (
     <StyledContainer maxWidth={"sm"}>
       <StyledPaper elevation={3}>
@@ -82,7 +146,10 @@ const Login = () => {
           Iniciar sesión
         </Typography>
 
-        <form style={{ width: "100%" }}>
+        <form
+          style={{ width: "100%" }}
+          onSubmit={formLogin.handleSubmit(onSubmitLogin)}
+        >
           <StyledTextField
             variant="outlined"
             margin="normal"
@@ -93,6 +160,10 @@ const Login = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={formLogin.handleChange}
+            value={formLogin.values.email}
+            error={!!formLogin.errors.email}
+            helperText={formLogin.errors.email}
           />
           <StyledTextField
             variant="outlined"
@@ -104,10 +175,25 @@ const Login = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={formLogin.handleChange}
+            value={formLogin.values.password}
+            error={!!formLogin.errors.password}
+            helperText={formLogin.errors.password}
           />
-          <StyledButton type="submit" fullWidth variant="contained">
-            Iniciar sesión
+
+          <StyledButton
+            type="submit"
+            fullWidth
+            variant="contained"
+            loadingButton={loadingSubmit}
+            disabled={loadingSubmit}
+          >
+            {loadingSubmit ? "Iniciando sesión..." : "Iniciar sesión"}
           </StyledButton>
+
+          {/* Muestra errores del formulario */}
+          <TextErrors errors={formLogin.errors} />
+
           <Box
             display="flex"
             justifyContent="space-between"
