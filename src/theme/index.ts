@@ -44,5 +44,4 @@ const rawTheme = createTheme({
   },
 });
 
-// Ajusta tipografria responsiva, segun el tamaño de la pantalla o breakpoints
 export const theme = responsiveFontSizes(rawTheme);

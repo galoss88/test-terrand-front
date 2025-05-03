@@ -10,10 +10,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-// Estilos personalizados
 const StyledContainer = styled(Container)(() => ({
   height: "100vh",
-  width: "100vw",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -43,7 +41,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
       borderColor: "rgba(255, 255, 255, 0.7)", //Estilos del borde al hacer foco
     },
   },
-  "& .MuiInputLabel-root": {  
+  "& .MuiInputLabel-root": {
     color: "rgba(255, 255, 255, 0.7)", //Estilos de la etiqueta
   },
   "& .MuiInputBase-input": {
@@ -64,7 +62,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   margin: theme.spacing(1),
-  backgroundColor: "rgba(255, 255, 255, 0.9)",
+  backgroundColor: theme.palette.primary.contrastText,
   color: "#e17055",
   width: 56,
   height: 56,
@@ -84,7 +82,7 @@ const Login = () => {
           Iniciar sesión
         </Typography>
 
-        <form>
+        <form style={{ width: "100%" }}>
           <StyledTextField
             variant="outlined"
             margin="normal"
