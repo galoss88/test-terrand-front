@@ -1,0 +1,82 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Nicolás",
+      "email": "nico@example.com",
+      "password": 12345678
+    },
+    {
+      "id": "2",
+      "name": "Ana",
+      "email": "ana@example.com",
+      "password": 12345678
+    },
+    {
+      "id": "812f",
+      "email": "gallogarcianicolas@gmail.com",
+      "password": "/78914526",
+      "name": "Nicolas Gallo Garcia"
+    },
+    {
+      "id": "eb0a",
+      "email": "gallogarcianicolas@gmail.com",
+      "password": "/78914526",
+      "name": "Nicolas Gallo Garcia"
+    },
+    {
+      "id": "b252",
+      "email": "gallogarcianicolas@gmail.com",
+      "password": "/78914526",
+      "name": "Nicolas Gallo Garcia"
+    },
+    {
+      "id": "63fa",
+      "email": "ezesaravia05@gmail.com",
+      "password": "1234346456546",
+      "name": "Nicolas Gallo Garcia"
+    },
+    {
+      "id": "4265",
+      "email": "nico@gmail.com",
+      "password": "123456789",
+      "name": "Nicolas gallo garcia"
+    },
+    {
+      "id": "784c",
+      "email": "ezesaravia05@gmail.com",
+      "password": "12d12d12d12d12d21",
+      "name": "Nicolas Gallo Garcia"
+    },
+    {
+      "id": "5e7c",
+      "email": "ezesaravia05@gmail.com",
+      "password": "d12d12d12d12d12d",
+      "name": "2d12d"
+    },
+    {
+      "id": "ee5c",
+      "email": "nico@gmail.com",
+      "password": "12d12d12d1d212",
+      "name": "Nicolas Gallo Garcia"
+    },
+    {
+      "id": "2b9b",
+      "email": "nico@gmail.com",
+      "password": "12d12d12d12d12d",
+      "name": "Nicolas Gallo Garcia"
+    },
+    {
+      "id": "7ffb",
+      "email": "nico@gmail.com",
+      "password": "12d12d12d12d12d",
+      "name": "Nicolas Gallo Garcia"
+    },
+    {
+      "id": "8d47",
+      "email": "nico@gmail.com",
+      "password": "12d12d12d12d12d",
+      "name": "21d"
+    }
+  ]
+}

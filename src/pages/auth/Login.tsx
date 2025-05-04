@@ -1,10 +1,12 @@
+import {
+  LinkButton,
+  LoadingButton,
+} from "@/components/Material/MaterialButton";
 import { useForm } from "@/hooks";
 import {
   Avatar,
   Box,
-  Button,
   Container,
-  Link,
   Paper,
   TextField,
   Typography,
@@ -48,27 +50,6 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
   "& .MuiInputBase-input": {
     color: "rgba(255, 255, 255, 0.9)", //Estilos del texto
-  },
-}));
-
-interface StyledButtonProps {
-  loadingButton?: boolean;
-}
-
-const StyledButton = styled(Button, {
-  shouldForwardProp: (prop) => prop !== "loadingButton",
-})<StyledButtonProps>(({ theme, loadingButton }) => ({
-  margin: theme.spacing(2, 0),
-  padding: theme.spacing(1.2),
-  borderRadius: 50,
-  backgroundColor: loadingButton
-    ? theme.palette.action.disabledBackground
-    : "rgba(255, 247, 237, 0.9)",
-  color: loadingButton ? theme.palette.action.disabled : "#e17055",
-  "&:hover": {
-    backgroundColor: loadingButton
-      ? theme.palette.action.disabledBackground
-      : "rgba(255, 247, 237, 1)",
   },
 }));
 
@@ -179,16 +160,15 @@ const Login = () => {
             error={!!formLogin.errors.password}
             helperText={formLogin.errors.password}
           />
-
-          <StyledButton
+          <LoadingButton
             type="submit"
             fullWidth
             variant="contained"
-            loadingButton={loadingSubmit}
+            isLoading={loadingSubmit}
             disabled={loadingSubmit}
-          >
-            {loadingSubmit ? "Iniciando sesión..." : "Iniciar sesión"}
-          </StyledButton>
+            textWhenNotLoading="Iniciar sesión"
+            loadingText="Iniciando sesión..."
+          ></LoadingButton>
 
           <Box
             display="flex"
@@ -196,12 +176,8 @@ const Login = () => {
             width="100%"
             mt={1}
           >
-            <Link href="#" variant="body2" color="rgba(255, 255, 255, 0.7)">
-              Registrarse
-            </Link>
-            <Link href="#" variant="body2" color="rgba(255, 255, 255, 0.7)">
-              ¿Olvidaste tu contraseña?
-            </Link>
+            <LinkButton href={"/auth/register"}>Registrarse</LinkButton>
+            <LinkButton href={"#"}> ¿Olvidaste tu contraseña?</LinkButton>
           </Box>
         </form>
       </StyledPaper>
