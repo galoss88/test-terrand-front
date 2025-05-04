@@ -2,7 +2,7 @@ import Register from "@/pages/auth/Register";
 import { lazy } from "react";
 import { useRoutes } from "react-router";
 import ProtectedRoute from "./ProtectedRoute";
-import MyRecipes from "@/pages/myRecipes";
+import MyRecipes from "@/pages/recipes/myRecipes/index";
 //Aplicamos lazy loading a las rutas de la aplicacion
 const Login = lazy(() => import("@/pages/auth/Login"));
 
