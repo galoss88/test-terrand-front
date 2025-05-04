@@ -5,56 +5,14 @@ import {
 } from "@/components/Material/MaterialButton";
 import { MaterialModal } from "@/components/Material/MaterialModal";
 import { useForm } from "@/hooks";
-import { Avatar, Container, Paper, TextField, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Typography } from "@mui/material";
 import { useState } from "react";
-
-const StyledContainer = styled(Container)(() => ({
-  height: "100vh",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  background: "linear-gradient(135deg, #e69b7b 0%, #e17055 100%)",
-}));
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(4),
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  borderRadius: 16,
-  backgroundColor: "rgba(255, 255, 255, 0.1)",
-}));
-
-const StyledTextField = styled(TextField)(({ theme }) => ({
-  marginBottom: theme.spacing(2),
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "rgba(255, 255, 255, 0.3)", //Estilos del borde
-    },
-    "&:hover fieldset": {
-      borderColor: "rgba(255, 255, 255, 0.5)", //Estilos del borde al pasar el mouse
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "rgba(255, 255, 255, 0.7)", //Estilos del borde al hacer foco
-    },
-  },
-  "& .MuiInputLabel-root": {
-    color: "rgba(255, 255, 255, 0.7)", //Estilos de la etiqueta
-  },
-  "& .MuiInputBase-input": {
-    color: "rgba(255, 255, 255, 0.9)", //Estilos del texto
-  },
-}));
-
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  margin: theme.spacing(1),
-  backgroundColor: theme.palette.primary.contrastText,
-  color: "#e17055",
-  width: 56,
-  height: 56,
-}));
+import {
+  StyledAvatar,
+  StyledContainer,
+  StyledPaper,
+  StyledTextField,
+} from "./styles";
 
 const initialValues = {
   email: "",
