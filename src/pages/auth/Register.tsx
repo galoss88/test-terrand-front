@@ -12,6 +12,7 @@ import {
   StyledContainer,
   StyledPaper,
   StyledTextField,
+  StyledTextModal,
 } from "./styles";
 
 const initialValues = {
@@ -87,15 +88,17 @@ const Register = () => {
 
   return (
     <StyledContainer maxWidth={"sm"}>
-      <MaterialModal open={registerSuccess}>
+      <MaterialModal open={!registerSuccess}>
         <MaterialModal.Container>
           <MaterialModal.Header>
-            <Typography variant="h6" component="h2" color="#e17055">
+            <StyledTextModal variant="h6">
               Usuario creado con éxito
-            </Typography>
+            </StyledTextModal>
           </MaterialModal.Header>
           <MaterialModal.Content>
-            <LinkButton href={"/auth/login"}>Iniciar Sesión</LinkButton>
+            <LinkButton href={"/auth/login"}>
+              Iniciar Sesión
+            </LinkButton>
             <MaterialButton onClick={onCloseModal}>
               Crear otro usuario
             </MaterialButton>

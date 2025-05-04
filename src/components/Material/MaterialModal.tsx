@@ -13,6 +13,7 @@ const ModalContainer = styled(Paper)(({ theme }) => ({
   maxHeight: "90vh",
   overflow: "auto",
   outline: "none",
+  backgroundColor: theme.palette.primary.main,
 }));
 
 // Tipos para las props del modal principal

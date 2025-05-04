@@ -84,6 +84,13 @@
       "password": "78914526",
       "repeatPassword": "78914526",
       "name": "nicolas"
+    },
+    {
+      "id": "9d40",
+      "email": "ezesaravia05@gmail.com",
+      "password": "12345678",
+      "repeatPassword": "12345678",
+      "name": "Nicolas Gallo Garcia"
     }
   ]
 }

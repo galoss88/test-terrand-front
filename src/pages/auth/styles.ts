@@ -1,4 +1,11 @@
-import { Avatar, Container, Paper, styled, TextField } from "@mui/material";
+import {
+  Avatar,
+  Container,
+  Paper,
+  styled,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 export const StyledContainer = styled(Container)(({ theme }) => ({
   height: "100vh",
@@ -45,4 +52,15 @@ export const StyledAvatar = styled(Avatar)(({ theme }) => ({
   color: "#e17055",
   width: 56,
   height: 56,
+}));
+
+export const StyledText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.primary.contrastText,
+  marginBottom: theme.spacing(2),
+}));
+
+export const StyledTextModal = styled(Typography)(({ theme }) => ({
+  color: theme.palette.primary.contrastText,
+  marginBottom: theme.spacing(2),
+  textAlign: "center",
 }));

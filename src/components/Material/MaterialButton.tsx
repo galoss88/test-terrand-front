@@ -69,7 +69,6 @@ export const LinkButton: React.FC<MaterialButtonProps> = ({
       onClick={handleClick}
       {...buttonProps}
       sx={{
-        ...buttonProps.sx,
         backgroundColor: "transparent",
         color: "#ffffff82",
         outline: "none",
@@ -80,7 +79,8 @@ export const LinkButton: React.FC<MaterialButtonProps> = ({
           background: "none",
           color: "#FFF",
         },
-        
+        textAlign: "center",
+        ...buttonProps.sx,
       }}
     >
       {buttonProps.children}
