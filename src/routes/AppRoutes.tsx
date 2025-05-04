@@ -1,7 +1,8 @@
-import { Navigate, useRoutes } from "react-router";
-import ProtectedRoute from "./ProtectedRoute";
 import Register from "@/pages/auth/Register";
 import { lazy } from "react";
+import { useRoutes } from "react-router";
+import ProtectedRoute from "./ProtectedRoute";
+import MyRecipes from "@/pages/myRecipes";
 //Aplicamos lazy loading a las rutas de la aplicacion
 const Login = lazy(() => import("@/pages/auth/Login"));
 
@@ -27,8 +28,11 @@ export const AppRoutes = () => {
       path: "/",
       element: <ProtectedRoute />,
       children: [
-        { index: true, element: <Navigate to="/home" /> },
-        { path: "home", element: <Home /> },
+        { index: true, element: <Home /> },
+        {
+          path: "/myRecipes",
+          element: <MyRecipes />,
+        },
       ],
     },
   ];

@@ -1,10 +1,14 @@
+import { LinkButton } from "@/components/Material/MaterialButton";
+import { StyledContainer } from "../auth/styles";
 
- const Home = () => {
+const Home = () => {
   return (
-    <div>
-      Hola este es el home
-    </div>
-  )
-}
+    <StyledContainer maxWidth={false} sx={{ margin: 0, padding: 0 }}>
+      <ul>
+        <li><LinkButton href="/myRecipes">Mis recetas</LinkButton></li>
+      </ul>
+    </StyledContainer>
+  );
+};
 
-export default Home
+export default Home;
