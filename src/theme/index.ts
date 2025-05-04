@@ -61,7 +61,7 @@ const rawTheme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+          // boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           "&:hover": {
             boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.15)",
           },

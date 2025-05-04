@@ -80,6 +80,7 @@ export const LinkButton: React.FC<MaterialButtonProps> = ({
           background: "none",
           color: "#FFF",
         },
+        
       }}
     >
       {buttonProps.children}
