@@ -37,7 +37,7 @@ export const ListRecipes = ({ recipes }: { recipes: IRecipe[] }) => {
   const navigate = useNavigate();
   const onEdit = useCallback(
     (recipeId: IRecipe["id"]) => {
-      navigate(`/recipes/${recipeId}`);
+      navigate(`/myRecipes/detail/${recipeId}`);
     },
     [navigate]
   );

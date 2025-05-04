@@ -1,3 +1,4 @@
+import { StyledContainer } from "@/pages/auth/styles";
 import { useEffect, useState } from "react";
 import { ListRecipes } from "./components";
 import { IRecipe } from "./types";
@@ -15,10 +16,10 @@ const MyRecipes = () => {
     fetchData();
   }, []);
   return (
-    <div>
+    <StyledContainer maxWidth={false} sx={{ backgroundColor: "tranparent" }}>
       Mis recetas
       <ListRecipes recipes={recipes} />
-    </div>
+    </StyledContainer>
   );
 };
 
