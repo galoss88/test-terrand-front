@@ -1,4 +1,5 @@
 import Register from "@/pages/auth/Register";
+import Create from "@/pages/recipes/create";
 import Detail from "@/pages/recipes/detail/Detail";
 import MyRecipes from "@/pages/recipes/myRecipes/index";
 import { lazy } from "react";
@@ -37,6 +38,10 @@ export const AppRoutes = () => {
         {
           path: "myRecipes/detail/:id",
           element: <Detail />,
+        },
+        {
+          path: "myRecipes/create",
+          element: <Create />,
         },
       ],
     },

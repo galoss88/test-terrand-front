@@ -1,5 +1,6 @@
 import { StyledContainer, StyledText } from "@/pages/auth/styles";
 import { Home } from "@mui/icons-material";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { Box, Divider, Stack } from "@mui/material";
 import { useNavigate } from "react-router";
@@ -14,6 +15,11 @@ const menuButtons = [
     icon: <MenuBookIcon></MenuBookIcon>,
     to: "/myRecipes",
   },
+  {
+    title: "Crear receta",
+    icon: <AddBoxIcon></AddBoxIcon>,
+    to: "/myRecipes/create",
+  },
 ];
 
 const Header = () => {
@@ -22,7 +28,7 @@ const Header = () => {
     <StyledContainer
       fixed
       maxWidth={"xs"}
-      sx={{ maxHeight: { xs: 60, sm: 60 }, mt: .5 }}
+      sx={{ maxHeight: { xs: 60, sm: 60 }, mt: 0.5 }}
     >
       <Stack
         direction="row"
