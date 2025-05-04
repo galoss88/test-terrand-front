@@ -102,7 +102,6 @@ const Login = () => {
         body: JSON.stringify(values),
       });
       const data = await response.json();
-      console.log("Success:", data);
       return data;
     } catch (error) {
       console.error("Error:", error);
@@ -110,8 +109,6 @@ const Login = () => {
       setLoadingSubmit(false);
     }
   };
-
-  console.log("formLogin", formLogin.values, loadingSubmit);
 
   return (
     <StyledContainer maxWidth={"sm"}>

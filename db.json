@@ -77,6 +77,13 @@
       "email": "nico@gmail.com",
       "password": "12d12d12d12d12d",
       "name": "21d"
+    },
+    {
+      "id": "cf83",
+      "email": "gallogarcianicolas@gmail.com",
+      "password": "78914526",
+      "repeatPassword": "78914526",
+      "name": "nicolas"
     }
   ]
 }

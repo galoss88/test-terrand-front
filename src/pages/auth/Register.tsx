@@ -59,6 +59,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 const initialValues = {
   email: "",
   password: "",
+  repeatPassword: "",
   name: "",
 };
 
@@ -75,6 +76,9 @@ const validate = (
   }
   if (!values.password) {
     errors.password = "La contraseña es requerida";
+  } else if (values.password.trim() !== values.repeatPassword.trim()) {
+    errors.repeatPassword = "Las contraseñas no coinciden";
+    errors.password = "Las contraseñas no coinciden";
   }
   if (values.password.length < limitLengthPassword) {
     errors.password = `La contraseña debe tener al menos ${limitLengthPassword} caracteres`;
@@ -200,7 +204,21 @@ const Register = () => {
             error={!!formLogin.errors.password}
             helperText={formLogin.errors.password}
           />
-
+          <StyledTextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="repeatPassword"
+            label="Repetir Contraseña"
+            type="password"
+            id="repeatPassword"
+            autoComplete="current-password"
+            onChange={formLogin.handleChange}
+            value={formLogin.values.repeatPassword}
+            error={!!formLogin.errors.repeatPassword}
+            helperText={formLogin.errors.repeatPassword}
+          />
           <LoadingButton
             type="submit"
             fullWidth
