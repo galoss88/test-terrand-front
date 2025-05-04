@@ -18,9 +18,6 @@ export const useForm = <T extends Record<string, any>>({
     index?: number
   ) => {
     const { name, value } = e.target;
-    // const isArray = Array.isArray(values[name]);
-    const isIndexValid = index !== undefined;
-    console.log("values[name][index]", values[name][isIndexValid ? index : 2]);
     setValues((prev) => {
       const field = prev[name as keyof T];
       const isArr = Array.isArray(field);
@@ -100,6 +97,16 @@ export const useForm = <T extends Record<string, any>>({
       };
     });
   };
+
+  //ingredientes
+  const addItem = (property: keyof typeof values) => {
+    setValues((prev) => ({
+      ...prev,
+      [property]: Array.isArray(prev[property])
+        ? [...(prev[property] as string[]), "new"]
+        : ["new"],
+    }));
+  };
   const isValid = Object.keys(errors).length === 0;
 
   return {
@@ -110,6 +117,7 @@ export const useForm = <T extends Record<string, any>>({
     resetForm,
     isValid,
     setValues,
-    deleteData
+    deleteData,
+    addItem,
   };
 };

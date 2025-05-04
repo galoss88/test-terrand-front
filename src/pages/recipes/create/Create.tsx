@@ -24,16 +24,6 @@ const Create = () => {
 
   const onSubmitRecipe = () => {};
 
-  //ingredientes
-  const addItem = (type: keyof typeof formRecipe.values) => {
-    formRecipe.setValues((prev) => ({
-      ...prev,
-      [type]: Array.isArray(prev[type])
-        ? [...(prev[type] as string[]), "new"]
-        : ["new"],
-    }));
-  };
-
   return (
     <StyledContainer maxWidth={false} sx={{ height: "100%" }}>
       <StyledPaper elevation={3} sx={{ height: "100%" }}>
@@ -97,7 +87,7 @@ const Create = () => {
                 required
                 fullWidth
                 id="title"
-                label="title"
+                label="Titulo"
                 name="title"
                 autoComplete="title"
                 autoFocus
@@ -159,7 +149,7 @@ const Create = () => {
                   </Box>
                 );
               })}
-              <MaterialButton onClick={() => addItem("ingredients")}>
+              <MaterialButton onClick={() => formRecipe.addItem("ingredients")}>
                 +
               </MaterialButton>
             </Box>
@@ -196,7 +186,9 @@ const Create = () => {
                   </Box>
                 );
               })}
-              <MaterialButton onClick={() => addItem("instructions")}>
+              <MaterialButton
+                onClick={() => formRecipe.addItem("instructions")}
+              >
                 +
               </MaterialButton>
             </Box>
