@@ -1,11 +1,4 @@
-import { MaterialButton } from "@/components/Material/MaterialButton";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
+
 import { useEffect, useState } from "react";
 interface IRecipe {
   id: number;
@@ -15,31 +8,31 @@ interface IRecipe {
   instructions: string[];
   image: string;
 }
-export const MuiCardRecipes = () => {
-  return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        component="img"
-        alt="green iguana"
-        height="140"
-        image="/static/images/cards/contemplative-reptile.jpg"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Lizard
-        </Typography>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <MaterialButton size="small">Share</MaterialButton>
-        <MaterialButton size="small">Learn More</MaterialButton>
-      </CardActions>
-    </Card>
-  );
-};
+// export const MuiCardRecipes = () => {
+//   return (
+//     <Card sx={{ maxWidth: 345 }}>
+//       <CardMedia
+//         component="img"
+//         alt="green iguana"
+//         height="140"
+//         image="/static/images/cards/contemplative-reptile.jpg"
+//       />
+//       <CardContent>
+//         <Typography gutterBottom variant="h5" component="div">
+//           Lizard
+//         </Typography>
+//         <Typography variant="body2" sx={{ color: "text.secondary" }}>
+//           Lizards are a widespread group of squamate reptiles, with over 6,000
+//           species, ranging across all continents except Antarctica
+//         </Typography>
+//       </CardContent>
+//       <CardActions>
+//         <MaterialButton size="small">Share</MaterialButton>
+//         <MaterialButton size="small">Learn More</MaterialButton>
+//       </CardActions>
+//     </Card>
+//   );
+// };
 const ListRecipes = ({ recipes }: { recipes: IRecipe[] }) => {
   if (recipes.length === 0) {
     return <p>No hay recetas</p>;
