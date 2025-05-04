@@ -6,7 +6,7 @@ const rawTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      light: "#E07A5F",
+      light: "#D9E5D6",
       main: "#D05F40",
       dark: "#B24C32",
       contrastText: "#fff",

@@ -52,7 +52,11 @@ const Detail = () => {
 
       {/* Seccion de ingredientes y instrucciones */}
       <Box
-        sx={{ display: "flex", flexDirection: "row", gap: { xs: 1, md: 3 } }}
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          gap: { xs: 1, md: 10 },
+        }}
       >
         <Box
           sx={{
@@ -69,11 +73,21 @@ const Detail = () => {
           </ul>
         </Box>
 
-        <ul>
-          {dataDetail.instructions.map((ingredient, index) => {
-            return <li key={ingredient}>{`${index}) ${ingredient}`}</li>;
-          })}
-        </ul>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: { xs: 0, md: 0 },
+          }}
+        >
+          <StyledText>Instrucciones</StyledText>
+
+          <ul>
+            {dataDetail.instructions.map((ingredient, index) => {
+              return <li key={ingredient}>{`${index}) ${ingredient}`}</li>;
+            })}
+          </ul>
+        </Box>
       </Box>
     </StyledContainer>
   );

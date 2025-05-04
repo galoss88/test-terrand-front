@@ -12,7 +12,7 @@ export const StyledContainer = styled(Container)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   
-  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)`,
+  background: theme.palette.primary.light,
 }));
 
 export const StyledPaper = styled(Paper)(({ theme }) => ({
