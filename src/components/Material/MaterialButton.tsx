@@ -1,4 +1,4 @@
-import { Button, ButtonProps, styled } from "@mui/material";
+import { Button, ButtonProps, styled, useTheme } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router";
 
@@ -84,6 +84,30 @@ export const LinkButton: React.FC<MaterialButtonProps> = ({
       }}
     >
       {buttonProps.children}
+    </StyledButton>
+  );
+};
+
+export const DeleteButton: React.FC<MaterialButtonProps> = ({
+  children,
+  ...buttonProps
+}) => {
+  const theme = useTheme();
+  return (
+    <StyledButton
+      {...buttonProps}
+      sx={{
+        color: theme.palette.error.main,
+        backgroundColor: "transparent",
+        padding: 0,
+        "&:hover": {
+          backgroundColor: theme.palette.error.main,
+          padding: 0,
+        },
+        ...buttonProps.sx,
+      }}
+    >
+      {children}
     </StyledButton>
   );
 };

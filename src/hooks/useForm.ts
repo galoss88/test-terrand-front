@@ -1,12 +1,12 @@
 import { ChangeEvent, useState } from "react";
 
 // Usamos unknown en lugar de any
-interface IUseFormProps<T extends Record<string, unknown>> {
+interface IUseFormProps<T extends Record<string, any>> {
   initialValues: T;
   validate?: (values: T) => Partial<Record<keyof T, string>>;
 }
 
-export const useForm = <T extends Record<string, unknown>>({
+export const useForm = <T extends Record<string, any>>({
   initialValues,
   validate,
 }: IUseFormProps<T>) => {
@@ -14,12 +14,37 @@ export const useForm = <T extends Record<string, unknown>>({
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    index?: number
   ) => {
     const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
+    // const isArray = Array.isArray(values[name]);
+    const isIndexValid = index !== undefined;
+    console.log("values[name][index]", values[name][isIndexValid ? index : 2]);
+    setValues((prev) => {
+      const field = prev[name as keyof T];
+      const isArr = Array.isArray(field);
+      let updatedField: unknown;
+
+      if (isArr) {
+        const arr = field as unknown[];
+
+        if (index !== undefined) {
+          // Reemplazar el elemento en la posición `index`
+          updatedField = arr.map((item, i) => (i === index ? value : item));
+        } else {
+          // Añadir un nuevo elemento al final
+          updatedField = [...arr, value];
+        }
+      } else {
+        // No es array: simple override
+        updatedField = value;
+      }
+
+      return {
+        ...prev,
+        [name]: updatedField,
+      };
     });
 
     // if (validate) {
@@ -53,7 +78,28 @@ export const useForm = <T extends Record<string, unknown>>({
       }
     };
   };
+  //Solo va servir para las propiedades que tengan de valor un array
+  const deleteData = (property: string, indexToDelete: number) => {
+    setValues((prev) => {
+      const field = prev[property as keyof T];
+      const isArr = Array.isArray(field);
+      let updatedField: unknown;
 
+      if (isArr) {
+        const arr = field as unknown[];
+
+        if (indexToDelete !== undefined) {
+          // Reemplazar el elemento en la posición `index`
+          updatedField = arr.filter((_, i) => i !== indexToDelete);
+        }
+      }
+
+      return {
+        ...prev,
+        [property]: updatedField,
+      };
+    });
+  };
   const isValid = Object.keys(errors).length === 0;
 
   return {
@@ -64,5 +110,6 @@ export const useForm = <T extends Record<string, unknown>>({
     resetForm,
     isValid,
     setValues,
+    deleteData
   };
 };
