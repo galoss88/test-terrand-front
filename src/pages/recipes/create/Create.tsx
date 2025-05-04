@@ -22,7 +22,17 @@ const Create = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const formRecipe = useForm({ initialValues });
 
-  const onSubmitRecipe = () => {};
+  const onSubmitRecipe = () => {
+    const url = "http://localhost:3000/recipes";
+    const idUser = 1;
+    const response = fetch(`${url}?id=${idUser}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formRecipe.values),
+    });
+  };
 
   return (
     <StyledContainer maxWidth={false} sx={{ height: "100%" }}>
