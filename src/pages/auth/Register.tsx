@@ -88,7 +88,7 @@ const Register = () => {
 
   return (
     <StyledContainer maxWidth={"sm"}>
-      <MaterialModal open={!registerSuccess}>
+      <MaterialModal open={registerSuccess}>
         <MaterialModal.Container>
           <MaterialModal.Header>
             <StyledTextModal variant="h6">

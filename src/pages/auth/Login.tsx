@@ -5,7 +5,13 @@ import {
 import { useForm } from "@/hooks";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
-import { StyledAvatar, StyledContainer, StyledPaper, StyledTextField } from "./styles";
+import { useNavigate } from "react-router";
+import {
+  StyledAvatar,
+  StyledContainer,
+  StyledPaper,
+  StyledTextField,
+} from "./styles";
 
 const initialValues = {
   email: "",
@@ -36,11 +42,13 @@ const limitLengthPassword = 8;
 const Login = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const formLogin = useForm({ initialValues, validate });
-
+  const navigate = useNavigate();
   const onSubmitLogin = async (values: InitialValues) => {
     setLoadingSubmit(true);
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const url = "http://localhost:3000/users";
+      const idUser = "1";
+      const response = await fetch(`${url}?id=${idUser}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +56,8 @@ const Login = () => {
         body: JSON.stringify(values),
       });
       const data = await response.json();
-      return data;
+      console.log("data", data);
+     navigate("/");
     } catch (error) {
       console.error("Error:", error);
     } finally {

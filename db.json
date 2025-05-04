@@ -91,6 +91,36 @@
       "password": "12345678",
       "repeatPassword": "12345678",
       "name": "Nicolas Gallo Garcia"
+    },
+    {
+      "id": "4058",
+      "email": "nico@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "11a0",
+      "email": "ezesaravia05@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "e983",
+      "email": "nico@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "2c18",
+      "email": "nico@gmail.com",
+      "password": "d1212d12d12d12d1"
+    },
+    {
+      "id": "c4f2",
+      "email": "ezesaravia05@gmail.com",
+      "password": "12d12122d"
+    },
+    {
+      "id": "246a",
+      "email": "nico@gmail.com",
+      "password": "12d12d12d12d"
     }
   ]
 }
