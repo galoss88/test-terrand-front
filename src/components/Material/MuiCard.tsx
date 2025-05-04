@@ -104,27 +104,4 @@ MuiCard.Actions = ({ children, ...props }: MuiCardActionsProps) => {
   return <CardActions {...props}>{children}</CardActions>;
 };
 
-// // Ejemplo de uso
-// export const CardExample = (): JSX.Element => {
-//   return (
-//     <MuiCard>
-//       <MuiCard.Media
-//         alt="green iguana"
-//         image="/static/images/cards/contemplative-reptile.jpg"
-//       />
-//       <MuiCard.Content>
-//         <MuiCard.Title>Lizard</MuiCard.Title>
-//         <MuiCard.Description>
-//           Lizards are a widespread group of squamate reptiles, with over 6,000
-//           species, ranging across all continents except Antarctica
-//         </MuiCard.Description>
-//       </MuiCard.Content>
-//       <MuiCard.Actions>
-//         <MaterialButton size="small">Share</MaterialButton>
-//         <MaterialButton size="small">Learn More</MaterialButton>
-//       </MuiCard.Actions>
-//     </MuiCard>
-//   );
-// };
-
 export { MuiCard };
