@@ -11,8 +11,7 @@ export const StyledContainer = styled(Container)(({ theme }) => ({
   height: "100vh",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
+  
   background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)`,
 }));
 
