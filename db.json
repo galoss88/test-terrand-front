@@ -4,123 +4,56 @@
       "id": "1",
       "name": "Nicolás",
       "email": "nico@example.com",
-      "password": 12345678
+      "password": "12345678"
     },
     {
       "id": "2",
       "name": "Ana",
       "email": "ana@example.com",
-      "password": 12345678
-    },
-    {
-      "id": "812f",
-      "email": "gallogarcianicolas@gmail.com",
-      "password": "/78914526",
-      "name": "Nicolas Gallo Garcia"
-    },
-    {
-      "id": "eb0a",
-      "email": "gallogarcianicolas@gmail.com",
-      "password": "/78914526",
-      "name": "Nicolas Gallo Garcia"
-    },
-    {
-      "id": "b252",
-      "email": "gallogarcianicolas@gmail.com",
-      "password": "/78914526",
-      "name": "Nicolas Gallo Garcia"
-    },
-    {
-      "id": "63fa",
-      "email": "ezesaravia05@gmail.com",
-      "password": "1234346456546",
-      "name": "Nicolas Gallo Garcia"
-    },
-    {
-      "id": "4265",
-      "email": "nico@gmail.com",
-      "password": "123456789",
-      "name": "Nicolas gallo garcia"
-    },
-    {
-      "id": "784c",
-      "email": "ezesaravia05@gmail.com",
-      "password": "12d12d12d12d12d21",
-      "name": "Nicolas Gallo Garcia"
-    },
-    {
-      "id": "5e7c",
-      "email": "ezesaravia05@gmail.com",
-      "password": "d12d12d12d12d12d",
-      "name": "2d12d"
-    },
-    {
-      "id": "ee5c",
-      "email": "nico@gmail.com",
-      "password": "12d12d12d1d212",
-      "name": "Nicolas Gallo Garcia"
-    },
-    {
-      "id": "2b9b",
-      "email": "nico@gmail.com",
-      "password": "12d12d12d12d12d",
-      "name": "Nicolas Gallo Garcia"
-    },
-    {
-      "id": "7ffb",
-      "email": "nico@gmail.com",
-      "password": "12d12d12d12d12d",
-      "name": "Nicolas Gallo Garcia"
-    },
-    {
-      "id": "8d47",
-      "email": "nico@gmail.com",
-      "password": "12d12d12d12d12d",
-      "name": "21d"
-    },
-    {
-      "id": "cf83",
-      "email": "gallogarcianicolas@gmail.com",
-      "password": "78914526",
-      "repeatPassword": "78914526",
-      "name": "nicolas"
-    },
-    {
-      "id": "9d40",
-      "email": "ezesaravia05@gmail.com",
-      "password": "12345678",
-      "repeatPassword": "12345678",
-      "name": "Nicolas Gallo Garcia"
-    },
-    {
-      "id": "4058",
-      "email": "nico@gmail.com",
       "password": "12345678"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "1",
+      "userId": "1",
+      "title": "Tortilla de patatas",
+      "description": "Una receta clásica española.",
+      "ingredients": [
+        "4 patatas",
+        "6 huevos",
+        "1 cebolla",
+        "sal"
+      ],
+      "instructions": [
+        "Pelar y cortar las patatas en rodajas.",
+        "Freír las patatas en aceite caliente hasta que estén doradas.",
+        "Batir los huevos y añadir las patatas fritas.",
+        "Verter la mezcla en una sartén caliente y cocinar a fuego lento.",
+        "Dar la vuelta a la tortilla y cocinar por el otro lado.",
+        "Servir caliente o fría."
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Totilla_Espa%C3%B1ola_-_Tapa_plato.JPG/1200px-Totilla_Espa%C3%B1ola_-_Tapa_plato.JPG?20130515212345"
     },
     {
-      "id": "11a0",
-      "email": "ezesaravia05@gmail.com",
-      "password": "12345678"
-    },
-    {
-      "id": "e983",
-      "email": "nico@gmail.com",
-      "password": "12345678"
-    },
-    {
-      "id": "2c18",
-      "email": "nico@gmail.com",
-      "password": "d1212d12d12d12d1"
-    },
-    {
-      "id": "c4f2",
-      "email": "ezesaravia05@gmail.com",
-      "password": "12d12122d"
-    },
-    {
-      "id": "246a",
-      "email": "nico@gmail.com",
-      "password": "12d12d12d12d"
+      "id": "2",
+      "userId": "1",
+      "title": "Ensalada César",
+      "description": "Fresca y sencilla.",
+      "ingredients": [
+        "Lechuga romana",
+        "Pechuga de pollo",
+        "Queso parmesano",
+        "Picatostes",
+        "Salsa César"
+      ],
+      "instructions": [
+        "Cortar la lechuga y colocar en un bol.",
+        "Añadir el pollo a la plancha en tiras.",
+        "Espolvorear queso y picatostes.",
+        "Aliñar con salsa César al gusto."
+      ],
+      "image": "https://c.pxhere.com/photos/db/f5/appetizer_bowl_ceramic_chicken_cooking_crispy_cuisine_delicious-1529253.jpg!d"
     }
   ]
 }
