@@ -19,7 +19,7 @@ const initialValues = {
   instructions: [""],
   ingredients: [""],
 };
-const Create = () => {
+const CreateRecipe = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const formRecipe = useForm({ initialValues });
 
@@ -222,7 +222,7 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default CreateRecipe;
 
 const styles = {
   buttonDelete: {
