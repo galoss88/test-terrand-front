@@ -8,19 +8,19 @@ import { IRecipe } from "../myRecipes/types";
 const Detail = () => {
   const { id } = useParams<{ id: string }>();
   const [dataDetail, setDataDetail] = useState<IRecipe>();
+  
   useEffect(() => {
-    console.log(id);
     const url = "http://localhost:3000/recipes";
     fetch(`${url}/?id=${id}`)
       .then((resp) => resp.json())
       .then((data) => {
         const cleanData = Array.isArray(data) ? data[0] : data;
-        console.log("cleanData", cleanData);
-
         setDataDetail(cleanData);
       });
   }, [id]);
+
   if (!dataDetail) return <>No hay datos para esta receta.</>;
+
   return (
     <StyledContainer
       maxWidth={false}
