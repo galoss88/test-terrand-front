@@ -11,16 +11,19 @@ export const recipeService = {
       method: "GET",
     });
   },
-  getById(id: string): Promise<IRecipe> {
+  getById(id: number): Promise<IRecipe> {
+    const idRecipeToGet = id;
     return fetchApi<IRecipe>({
-      url: `http://localhost:3000/recipes/${id}`,
+      url: `http://localhost:3000/recipes/${idRecipeToGet}`,
       method: "GET",
     });
   },
 
-  update(id: string, body: Omit<IRecipe, "id">): Promise<IRecipe> {
+  update(id: number, body: Omit<IRecipe, "id">): Promise<IRecipe> {
+    const idRecipeToUpdate = id;
+
     return fetchApi<IRecipe>({
-      url: `http://localhost:3000/recipes/${id}`,
+      url: `http://localhost:3000/recipes/${idRecipeToUpdate}`,
       method: "PUT",
       body,
     });
