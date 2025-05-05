@@ -8,9 +8,11 @@ import { IRecipe } from "../types";
 const RecipeItem = ({
   recipe,
   onEdit = () => {},
+  onDetail = () => {},
 }: {
   recipe: IRecipe;
   onEdit?: (recipeId: string | number) => void;
+  onDetail?: (recipeId: string | number) => void;
 }) => {
   return (
     <MuiCard key={recipe.id}>
@@ -24,9 +26,12 @@ const RecipeItem = ({
           })}
         </MuiCard.Description>
       </MuiCard.Content>
-      <MuiCard.Actions sx={{ justifyContent: "flex-end" }}>
+      <MuiCard.Actions sx={{ justifyContent: "space-between" }}>
         <MaterialButton onClick={() => onEdit(recipe.id)}>
           Editar
+        </MaterialButton>
+        <MaterialButton onClick={() => onDetail(recipe.id)}>
+          Ver detalle
         </MaterialButton>
       </MuiCard.Actions>
     </MuiCard>
@@ -35,12 +40,21 @@ const RecipeItem = ({
 
 export const ListRecipes = ({ recipes }: { recipes: IRecipe[] }) => {
   const navigate = useNavigate();
+
   const onEdit = useCallback(
+    (recipeId: IRecipe["id"]) => {
+      navigate(`/myRecipes/edit/${recipeId}`);
+    },
+    [navigate]
+  );
+
+  const onDetail = useCallback(
     (recipeId: IRecipe["id"]) => {
       navigate(`/myRecipes/detail/${recipeId}`);
     },
     [navigate]
   );
+
   if (recipes.length === 0) {
     return <p>No hay recetas</p>;
   }
@@ -48,7 +62,7 @@ export const ListRecipes = ({ recipes }: { recipes: IRecipe[] }) => {
     <Grid container spacing={2} justifyContent="flex-start">
       {recipes.map((recipe) => (
         <Grid size={{ xl: 2 }} key={recipe.id}>
-          <RecipeItem recipe={recipe} onEdit={onEdit} />
+          <RecipeItem recipe={recipe} onEdit={onEdit} onDetail={onDetail} />
         </Grid>
       ))}
     </Grid>

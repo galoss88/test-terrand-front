@@ -1,6 +1,7 @@
 import Register from "@/pages/auth/Register";
 import Create from "@/pages/recipes/create";
-import Detail from "@/pages/recipes/detail/Detail";
+import DetailRecipe from "@/pages/recipes/detail/DetailRecipe";
+import EditRecipe from "@/pages/recipes/edit";
 import MyRecipes from "@/pages/recipes/myRecipes/index";
 import { lazy } from "react";
 import { useRoutes } from "react-router";
@@ -37,11 +38,15 @@ export const AppRoutes = () => {
         },
         {
           path: "myRecipes/detail/:id",
-          element: <Detail />,
+          element: <DetailRecipe />,
         },
         {
           path: "myRecipes/create",
           element: <Create />,
+        },
+        {
+          path: "myRecipes/edit",
+          element: <EditRecipe />,
         },
       ],
     },
