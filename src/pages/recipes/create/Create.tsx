@@ -9,6 +9,7 @@ import {
   StyledPaper,
   StyledTextField,
 } from "@/pages/auth/styles";
+import { recipeService } from "@/services/recipes/recipesService";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 const initialValues = {
@@ -23,15 +24,17 @@ const Create = () => {
   const formRecipe = useForm({ initialValues });
 
   const onSubmitRecipe = () => {
-    const url = "http://localhost:3000/recipes";
-    const idUser = 1;
-    const response = fetch(`${url}?id=${idUser}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formRecipe.values),
-    });
+    const body = formRecipe.values;
+    recipeService.create({ body });
+    // const url = "http://localhost:3000/recipes";
+    // const idUser = 1;
+    // const response = fetch(`${url}?id=${idUser}`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(formRecipe.values),
+    // });
   };
 
   return (
