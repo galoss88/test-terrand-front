@@ -1,6 +1,6 @@
-import { CloudinaryService } from "./cloudinaryService";
-import { ImgBBService } from "./imgBbService";
-import { IImageUploadProvider, IImageUploadResponse } from "./types";
+import { CloudinaryService } from './cloudinaryService';
+import { ImgBBService } from './imgBbService';
+import { IImageUploadProvider, IImageUploadResponse } from './types';
 
 export class ImageUploadService {
   private primaryProvider: IImageUploadProvider;
@@ -32,6 +32,23 @@ export class ImageUploadService {
       ? this.primaryProvider.getImageUrl(imageId)
       : this.fallbackProvider.getImageUrl(imageId);
   }
-}
 
+  async deleteUnusedImage(imageUrl: string): Promise<boolean> {
+    try {
+      const provider = imageUrl.includes("cloudinary.com")
+        ? this.primaryProvider
+        : this.fallbackProvider;
+
+      const urlParts = imageUrl.split("/");
+      const publicId = urlParts[urlParts.length - 1].split(".")[0];
+
+      //habilitar delete
+
+      return true;
+    } catch (error) {
+      console.error("Error al eliminar imagen no usada:", error);
+      return false;
+    }
+  }
+}
 export const imageUploadService = new ImageUploadService();

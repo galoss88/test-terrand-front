@@ -1,11 +1,10 @@
-// EditRecipe.tsx - Implementación en el componente
 import {
   DeleteButton,
   LoadingButton,
   MaterialButton,
 } from "@/components/Material/MaterialButton";
 import { useForm } from "@/hooks/useForm";
-import { useImageUpload } from "@/hooks/useUploadImage";
+import { useImageSelection } from "@/hooks/useImageSelection";
 import {
   StyledContainer,
   StyledPaper,
@@ -13,7 +12,7 @@ import {
 } from "@/pages/auth/styles";
 import { recipeService } from "@/services/recipes/recipesService";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IRecipe } from "../myRecipes/types";
 
@@ -40,6 +39,7 @@ export const EditRecipe = () => {
 
   const [loadingData, setLoadingData] = useState(true);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [originalImage, setOriginalImage] = useState<string>("");
 
   const form = useForm<RecipeFormValues>({
     initialValues: defaultValues,
@@ -49,10 +49,12 @@ export const EditRecipe = () => {
       if (!values.description)
         errors.description = "La descripción es obligatoria";
 
+      // No validamos la imagen si hay un archivo seleccionado
       if (
         values.image &&
         !values.image.startsWith("data:image/") &&
-        !values.image.startsWith("http")
+        !values.image.startsWith("http") &&
+        !selectedFile
       ) {
         try {
           new URL(values.image);
@@ -70,16 +72,40 @@ export const EditRecipe = () => {
   });
 
   const {
-    loadingImage,
+    selectedFile,
+    localPreview,
     imgError,
-    imagePreview,
-    handleFileChange,
-    setImagePreview,
-  } = useImageUpload({
-    onSuccess: (imageUrl) => {
-      form.setPropertyValue("image", imageUrl);
+    loadingImage,
+    setLoadingImage,
+    handleFileSelection,
+    clearSelection,
+    setImgError,
+    setLocalPreview,
+    cleanup,
+  } = useImageSelection();
+
+  useEffect(() => {
+    return () => {
+      cleanup();
+    };
+  }, []);
+
+  const handleImageUrlChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const url = e.target.value;
+      form.handleChange(e);
+
+      if (url) {
+        if (selectedFile) {
+          clearSelection();
+        }
+        setLocalPreview(url);
+      } else {
+        setLocalPreview("");
+      }
     },
-  });
+    [form, selectedFile, clearSelection, setLocalPreview]
+  );
 
   useEffect(() => {
     if (!recipeId) return;
@@ -94,29 +120,45 @@ export const EditRecipe = () => {
           ingredients: recipe.ingredients.length ? recipe.ingredients : [""],
         });
         if (recipe.image) {
-          setImagePreview(recipe.image);
+          setLocalPreview(recipe.image);
+          setOriginalImage(recipe.image);
         }
       })
       .catch(() => {
         console.error("Error al cargar receta:");
       })
       .finally(() => setLoadingData(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipeId]);
 
   const onSubmit = async (values: RecipeFormValues) => {
     setLoadingSubmit(true);
     try {
+      let imageUrl = values.image;
+
+      if (selectedFile) {
+        setLoadingImage(true);
+        imageUrl = await recipeService.uploadImage(selectedFile);
+        setLoadingImage(false);
+      }
+
       const payload: Omit<IRecipe, "id"> = {
         title: values.title,
         description: values.description,
         instructions: values.instructions.filter((i) => i.trim() !== ""),
         ingredients: values.ingredients.filter((i) => i.trim() !== ""),
-        image: values.image,
+        image: imageUrl,
       };
+
       if (!recipeId) return;
       await recipeService.update(recipeId, payload);
-      navigate("/recipes");
+
+      if (originalImage && originalImage !== imageUrl) {
+        // await recipeService.deleteUnusedImage(originalImage);
+      }
+
+      clearSelection();
+
+      navigate("/myRecipes");
     } catch (err) {
       console.error("Error al actualizar receta:", err);
     } finally {
@@ -141,6 +183,8 @@ export const EditRecipe = () => {
 
   const placeholder =
     "https://via.placeholder.com/150?text=Sin+previsualizaci%C3%B3n";
+
+  const imageToShow = imgError ? placeholder : localPreview || placeholder;
 
   return (
     <StyledContainer maxWidth={false} sx={{ height: "100%" }}>
@@ -173,10 +217,7 @@ export const EditRecipe = () => {
                 name="image"
                 type="text"
                 label="URL de imagen"
-                onChange={(e) => {
-                  form.handleChange(e);
-                  setImagePreview(e.target.value);
-                }}
+                onChange={handleImageUrlChange}
                 value={form.values.image}
                 error={!!form.errors.image}
                 helperText={form.errors.image}
@@ -185,42 +226,38 @@ export const EditRecipe = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleFileChange}
+                  onChange={handleFileSelection}
                   style={{ marginTop: 8 }}
                   id="image-upload"
                 />
-                {loadingImage && <CircularProgress size={24} />}
+                {selectedFile && (
+                  <Typography variant="caption" sx={{ color: "success.main" }}>
+                    Archivo seleccionado: {selectedFile.name}
+                  </Typography>
+                )}
               </Box>
 
-              {imagePreview || form.values.image ? (
-                <Box
-                  component="img"
-                  src={
-                    imgError ? placeholder : imagePreview || form.values.image
-                  }
-                  alt="Preview"
-                  onError={() => setImagePreview(placeholder)}
-                  sx={{
-                    width: "100%",
-                    maxHeight: 200,
-                    objectFit: "cover",
-                    mt: 1,
-                    borderRadius: 2,
-                  }}
-                />
-              ) : (
-                <Box
-                  component="img"
-                  src={placeholder}
-                  alt="Sin imagen"
-                  sx={{
-                    width: "100%",
-                    maxHeight: 200,
-                    objectFit: "cover",
-                    mt: 1,
-                    borderRadius: 2,
-                  }}
-                />
+              <Box
+                component="img"
+                src={imageToShow}
+                alt="Preview"
+                onError={() => setImgError(true)}
+                sx={{
+                  width: "100%",
+                  maxHeight: 200,
+                  objectFit: "cover",
+                  mt: 1,
+                  borderRadius: 2,
+                }}
+              />
+
+              {selectedFile && (
+                <Typography
+                  variant="caption"
+                  sx={{ mt: 1, color: "info.main" }}
+                >
+                  La imagen se subirá cuando guardes los cambios
+                </Typography>
               )}
             </Box>
 
@@ -343,8 +380,8 @@ export const EditRecipe = () => {
             type="submit"
             fullWidth
             variant="contained"
-            isLoading={loadingSubmit}
-            disabled={loadingSubmit}
+            isLoading={loadingSubmit || loadingImage}
+            disabled={loadingSubmit || loadingImage}
             textWhenNotLoading="Guardar cambios"
             loadingText="Actualizando..."
           />
