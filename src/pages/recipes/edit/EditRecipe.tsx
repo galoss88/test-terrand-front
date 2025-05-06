@@ -359,6 +359,7 @@ export const EditRecipe = () => {
                     helperText={idx === 0 ? form.errors.instructions : ""}
                     multiline
                     rows={2}
+                    type="text"
                   />
                   {form.values.instructions.length > 1 && (
                     <DeleteButton

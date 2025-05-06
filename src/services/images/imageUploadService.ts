@@ -35,12 +35,12 @@ export class ImageUploadService {
 
   async deleteUnusedImage(imageUrl: string): Promise<boolean> {
     try {
-      const provider = imageUrl.includes("cloudinary.com")
-        ? this.primaryProvider
-        : this.fallbackProvider;
+      // const provider = imageUrl.includes("cloudinary.com")
+      //   ? this.primaryProvider
+      //   : this.fallbackProvider;
 
-      const urlParts = imageUrl.split("/");
-      const publicId = urlParts[urlParts.length - 1].split(".")[0];
+      // const urlParts = imageUrl.split("/");
+      // const publicId = urlParts[urlParts.length - 1].split(".")[0];
 
       //habilitar delete
 

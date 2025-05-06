@@ -8,7 +8,7 @@ const menuButtons = [
   {
     title: "Inicio",
     icon: <Home></Home>,
-    to: "/home",
+    to: "/",
   },
   {
     title: "Mis recetas",
