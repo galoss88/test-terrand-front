@@ -15,16 +15,9 @@
   ],
   "recipes": [
     {
-      "id": "1",
-      "userId": "1",
       "title": "Tortilla de patatas",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Totilla_Espa%C3%B1ola_-_Tapa_plato.JPG/1200px-Totilla_Espa%C3%B1ola_-_Tapa_plato.JPG?20130515212345",
       "description": "Una receta clásica española.",
-      "ingredients": [
-        "4 patatas",
-        "6 huevos",
-        "1 cebolla",
-        "sal"
-      ],
       "instructions": [
         "Pelar y cortar las patatas en rodajas.",
         "Freír las patatas en aceite caliente hasta que estén doradas.",
@@ -33,7 +26,13 @@
         "Dar la vuelta a la tortilla y cocinar por el otro lado.",
         "Servir caliente o fría."
       ],
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Totilla_Espa%C3%B1ola_-_Tapa_plato.JPG/1200px-Totilla_Espa%C3%B1ola_-_Tapa_plato.JPG?20130515212345"
+      "ingredients": [
+        "4 patatas",
+        "6 huevos",
+        "1 cebolla",
+        "gas"
+      ],
+      "id": "1"
     },
     {
       "id": "2",
@@ -56,16 +55,16 @@
       "image": "https://c.pxhere.com/photos/db/f5/appetizer_bowl_ceramic_chicken_cooking_crispy_cuisine_delicious-1529253.jpg!d"
     },
     {
-      "id": "cb8e",
       "title": "asdasd",
-      "image": "C:\\fakepath\\fer.jpg",
       "description": "21d12d",
       "instructions": [
         "12d12d"
       ],
       "ingredients": [
         "12d1"
-      ]
+      ],
+      "image": "https://i.ibb.co/d0bMWvRf/Captura-de-pantalla-2024-08-14-175409.png",
+      "id": "cb8e"
     },
     {
       "id": "51be",

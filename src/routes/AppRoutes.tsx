@@ -45,7 +45,7 @@ export const AppRoutes = () => {
           element: <Create />,
         },
         {
-          path: "myRecipes/edit",
+          path: "myRecipes/edit/:id",
           element: <EditRecipe />,
         },
       ],

@@ -1,6 +1,5 @@
 import { ChangeEvent, useState } from "react";
 
-// Usamos unknown en lugar de any
 interface IUseFormProps<T extends Record<string, any>> {
   initialValues: T;
   validate?: (values: T) => Partial<Record<keyof T, string>>;
@@ -75,7 +74,7 @@ export const useForm = <T extends Record<string, any>>({
       }
     };
   };
-  //Solo va servir para las propiedades que tengan de valor un array
+
   const deleteData = (property: string, indexToDelete: number) => {
     setValues((prev) => {
       const field = prev[property as keyof T];
@@ -98,7 +97,7 @@ export const useForm = <T extends Record<string, any>>({
     });
   };
 
-  //ingredientes
+  //Solo va servir para las propiedades que tengan de valor un array
   const addItem = (property: keyof typeof values) => {
     setValues((prev) => ({
       ...prev,
@@ -106,6 +105,15 @@ export const useForm = <T extends Record<string, any>>({
         ? [...(prev[property] as string[]), "new"]
         : ["new"],
     }));
+  };
+
+  const setPropertyValue = (property: keyof typeof values, value: string) => {
+    setValues((prev) => {
+      return {
+        ...prev,
+        [property]: value,
+      };
+    });
   };
   const isValid = Object.keys(errors).length === 0;
 
@@ -119,5 +127,6 @@ export const useForm = <T extends Record<string, any>>({
     setValues,
     deleteData,
     addItem,
+    setPropertyValue,
   };
 };

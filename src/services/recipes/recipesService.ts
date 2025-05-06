@@ -1,5 +1,6 @@
 import { IRecipe } from "@/pages/recipes/myRecipes/types";
 import { fetchApi } from "@/utils/api";
+import { imageUploadService } from "../images/imageUploadService";
 
 export const recipeService = {
   getAllById(id: string): Promise<IRecipe[]> {
@@ -11,7 +12,8 @@ export const recipeService = {
       method: "GET",
     });
   },
-  getById(id: number): Promise<IRecipe> {
+
+  getById(id: number | string): Promise<IRecipe> {
     const idRecipeToGet = id;
     return fetchApi<IRecipe>({
       url: `http://localhost:3000/recipes/${idRecipeToGet}`,
@@ -19,7 +21,7 @@ export const recipeService = {
     });
   },
 
-  update(id: number, body: Omit<IRecipe, "id">): Promise<IRecipe> {
+  update(id: number | string, body: Omit<IRecipe, "id">): Promise<IRecipe> {
     const idRecipeToUpdate = id;
 
     return fetchApi<IRecipe>({
@@ -36,5 +38,15 @@ export const recipeService = {
       method: "POST",
       body: body,
     });
+  },
+
+  async uploadImage(file: File | FormData): Promise<string> {
+    const result = await imageUploadService.uploadImage(file);
+
+    if (!result.success) {
+      throw new Error(result.error || "Error al subir la imagen");
+    }
+
+    return result.url;
   },
 };

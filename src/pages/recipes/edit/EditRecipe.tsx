@@ -1,9 +1,11 @@
+// EditRecipe.tsx - Implementación en el componente
 import {
   DeleteButton,
   LoadingButton,
   MaterialButton,
 } from "@/components/Material/MaterialButton";
-import { useForm } from "@/hooks";
+import { useForm } from "@/hooks/useForm";
+import { useImageUpload } from "@/hooks/useUploadImage";
 import {
   StyledContainer,
   StyledPaper,
@@ -17,7 +19,7 @@ import { IRecipe } from "../myRecipes/types";
 
 interface RecipeFormValues {
   title: string;
-  image: string; // URL or base64
+  image: string;
   description: string;
   instructions: string[];
   ingredients: string[];
@@ -33,13 +35,12 @@ const defaultValues: RecipeFormValues = {
 
 export const EditRecipe = () => {
   const { id } = useParams<{ id: string }>();
-  const recipeId = Number(id);
+  const recipeId = id;
   const navigate = useNavigate();
 
   const [loadingData, setLoadingData] = useState(true);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
-  // Hook de formulario (handles values, errors, add/delete items, submit)
   const form = useForm<RecipeFormValues>({
     initialValues: defaultValues,
     validate: (values) => {
@@ -47,12 +48,36 @@ export const EditRecipe = () => {
       if (!values.title) errors.title = "El título es obligatorio";
       if (!values.description)
         errors.description = "La descripción es obligatoria";
-      // validaciones para arrays
+
+      if (
+        values.image &&
+        !values.image.startsWith("data:image/") &&
+        !values.image.startsWith("http")
+      ) {
+        try {
+          new URL(values.image);
+        } catch {
+          errors.image = "La URL de imagen no es válida";
+        }
+      }
+
       if (values.ingredients.some((i) => !i))
         errors.ingredients = "Todos los ingredientes deben tener texto";
       if (values.instructions.some((i) => !i))
         errors.instructions = "Todas las instrucciones deben tener texto";
       return errors;
+    },
+  });
+
+  const {
+    loadingImage,
+    imgError,
+    imagePreview,
+    handleFileChange,
+    setImagePreview,
+  } = useImageUpload({
+    onSuccess: (imageUrl) => {
+      form.setPropertyValue("image", imageUrl);
     },
   });
 
@@ -63,35 +88,37 @@ export const EditRecipe = () => {
       .then((recipe: IRecipe) => {
         form.setValues({
           title: recipe.title,
-          image: recipe.image,
+          image: recipe?.image ?? "",
           description: recipe.description,
           instructions: recipe.instructions.length ? recipe.instructions : [""],
           ingredients: recipe.ingredients.length ? recipe.ingredients : [""],
         });
+        if (recipe.image) {
+          setImagePreview(recipe.image);
+        }
       })
       .catch(() => {
         console.error("Error al cargar receta:");
-        // podrías mostrar un mensaje de error al usuario
       })
       .finally(() => setLoadingData(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipeId]);
 
-  // 2) Manejar el envío de datos
   const onSubmit = async (values: RecipeFormValues) => {
     setLoadingSubmit(true);
     try {
-      await recipeService.update(recipeId, {
+      const payload: Omit<IRecipe, "id"> = {
         title: values.title,
-        image: values.image,
         description: values.description,
-        instructions: values.instructions,
-        ingredients: values.ingredients,
-      });
-      navigate("/recipes"); // redirigir tras actualizar
+        instructions: values.instructions.filter((i) => i.trim() !== ""),
+        ingredients: values.ingredients.filter((i) => i.trim() !== ""),
+        image: values.image,
+      };
+      if (!recipeId) return;
+      await recipeService.update(recipeId, payload);
+      navigate("/recipes");
     } catch (err) {
       console.error("Error al actualizar receta:", err);
-      // mostrar notificación de error
     } finally {
       setLoadingSubmit(false);
     }
@@ -111,6 +138,9 @@ export const EditRecipe = () => {
       </Box>
     );
   }
+
+  const placeholder =
+    "https://via.placeholder.com/150?text=Sin+previsualizaci%C3%B3n";
 
   return (
     <StyledContainer maxWidth={false} sx={{ height: "100%" }}>
@@ -133,9 +163,9 @@ export const EditRecipe = () => {
           }}
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          {/* Imagen y título/descripción */}
+          {/* Imagen: URL o archivo + preview */}
           <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
-            <Box sx={{ flex: 0.5 }}>
+            <Box sx={{ flex: 0.5, display: "flex", flexDirection: "column" }}>
               <StyledTextField
                 variant="outlined"
                 margin="normal"
@@ -143,12 +173,58 @@ export const EditRecipe = () => {
                 name="image"
                 type="text"
                 label="URL de imagen"
-                onChange={form.handleChange}
+                onChange={(e) => {
+                  form.handleChange(e);
+                  setImagePreview(e.target.value);
+                }}
                 value={form.values.image}
                 error={!!form.errors.image}
                 helperText={form.errors.image}
               />
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  style={{ marginTop: 8 }}
+                  id="image-upload"
+                />
+                {loadingImage && <CircularProgress size={24} />}
+              </Box>
+
+              {imagePreview || form.values.image ? (
+                <Box
+                  component="img"
+                  src={
+                    imgError ? placeholder : imagePreview || form.values.image
+                  }
+                  alt="Preview"
+                  onError={() => setImagePreview(placeholder)}
+                  sx={{
+                    width: "100%",
+                    maxHeight: 200,
+                    objectFit: "cover",
+                    mt: 1,
+                    borderRadius: 2,
+                  }}
+                />
+              ) : (
+                <Box
+                  component="img"
+                  src={placeholder}
+                  alt="Sin imagen"
+                  sx={{
+                    width: "100%",
+                    maxHeight: 200,
+                    objectFit: "cover",
+                    mt: 1,
+                    borderRadius: 2,
+                  }}
+                />
+              )}
             </Box>
+
+            {/* Título y descripción */}
             <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
               <StyledTextField
                 variant="outlined"
@@ -173,13 +249,25 @@ export const EditRecipe = () => {
                 value={form.values.description}
                 error={!!form.errors.description}
                 helperText={form.errors.description}
+                multiline
+                rows={4}
               />
             </Box>
           </Box>
 
           {/* Ingredientes e instrucciones */}
           <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
-            <Box sx={{ flex: 0.5, display: "flex", flexDirection: "column" }}>
+            <Box
+              sx={{
+                flex: 0.5,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+              }}
+            >
+              <Typography variant="subtitle1" color="rgba(255, 255, 255, 0.9)">
+                Ingredientes
+              </Typography>
               {form.values.ingredients.map((ing, idx) => (
                 <Box
                   key={idx}
@@ -192,13 +280,15 @@ export const EditRecipe = () => {
                     onChange={(e) => form.handleChange(e, idx)}
                     value={ing}
                     error={!!form.errors.ingredients}
-                    helperText={form.errors.ingredients}
+                    helperText={idx === 0 ? form.errors.ingredients : ""}
                   />
-                  <DeleteButton
-                    onClick={() => form.deleteData("ingredients", idx)}
-                  >
-                    X
-                  </DeleteButton>
+                  {form.values.ingredients.length > 1 && (
+                    <DeleteButton
+                      onClick={() => form.deleteData("ingredients", idx)}
+                    >
+                      X
+                    </DeleteButton>
+                  )}
                 </Box>
               ))}
               <MaterialButton onClick={() => form.addItem("ingredients")}>
@@ -206,7 +296,17 @@ export const EditRecipe = () => {
               </MaterialButton>
             </Box>
 
-            <Box sx={{ flex: 0.5, display: "flex", flexDirection: "column" }}>
+            <Box
+              sx={{
+                flex: 0.5,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+              }}
+            >
+              <Typography variant="subtitle1" color="rgba(255, 255, 255, 0.9)">
+                Instrucciones
+              </Typography>
               {form.values.instructions.map((inst, idx) => (
                 <Box
                   key={idx}
@@ -219,13 +319,17 @@ export const EditRecipe = () => {
                     onChange={(e) => form.handleChange(e, idx)}
                     value={inst}
                     error={!!form.errors.instructions}
-                    helperText={form.errors.instructions}
+                    helperText={idx === 0 ? form.errors.instructions : ""}
+                    multiline
+                    rows={2}
                   />
-                  <DeleteButton
-                    onClick={() => form.deleteData("instructions", idx)}
-                  >
-                    X
-                  </DeleteButton>
+                  {form.values.instructions.length > 1 && (
+                    <DeleteButton
+                      onClick={() => form.deleteData("instructions", idx)}
+                    >
+                      X
+                    </DeleteButton>
+                  )}
                 </Box>
               ))}
               <MaterialButton onClick={() => form.addItem("instructions")}>
