@@ -3,6 +3,7 @@ import {
   MaterialButton,
 } from "@/components/Material/MaterialButton";
 import { StyledText, StyledTextField } from "@/pages/auth/styles";
+import { useAppTheme } from "@/utils/useTheme";
 import { Box } from "@mui/material";
 
 interface RecipeListSectionProps {
@@ -35,6 +36,7 @@ const RecipeListSection: React.FC<RecipeListSectionProps> = ({
   multiline = false,
   rows = 1,
 }) => {
+  const theme = useAppTheme();
   return (
     <Box
       sx={{
@@ -60,7 +62,15 @@ const RecipeListSection: React.FC<RecipeListSectionProps> = ({
             rows={rows}
           />
           {items.length > 1 && (
-            <DeleteButton onClick={() => onDelete(idx)}>X</DeleteButton>
+            <DeleteButton
+              sx={{
+                "&:hover": { color: theme.palette.primary.contrastText },
+                fontSize:22
+              }}
+              onClick={() => onDelete(idx)}
+            >
+              X
+            </DeleteButton>
           )}
         </Box>
       ))}
