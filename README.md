@@ -1,54 +1,130 @@
-# React + TypeScript + Vite
+# 📚 Test-Terrand Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este repositorio contiene dos aplicaciones separadas:
 
-Currently, two official plugins are available:
+* **Frontend**: Aplicación SPA construida con **React** y **Vite**.
+* **Backend**: API REST construida con **Node.js**, **Express**, **TypeScript** y **TypeORM** (PostgreSQL).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Frontend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Tecnologías
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+* React 18
+* Vite
+* React Router
+* Material UI
+* Cloudinary (para subir imágenes)
+
+### Instalación
+
+```bash
+# En la carpeta del frontend
+cd frontend
+pnpm install    # o npm install / yarn
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Variables de entorno
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Crea un archivo `.env` en la raíz de `frontend` con las siguientes claves:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```dotenv
+VITE_API_URL=https://tu-backend.example.com/api/v1
+VITE_CLOUDINARY_CLOUD_NAME=tuCloudName
+VITE_CLOUDINARY_UPLOAD_PRESET=tuUploadPreset
 ```
+
+### Scripts
+
+| Comando        | Descripción                                              |
+| -------------- | -------------------------------------------------------- |
+| `pnpm dev`     | Levanta servidor de desarrollo (`http://localhost:5173`) |
+| `pnpm build`   | Genera la carpeta `dist/` para producción                |
+| `pnpm preview` | Sirve localmente el build estático                       |
+
+### Deployment
+
+1. Asegúrate de configurar las variables de entorno en tu proveedor (Vercel, Netlify, etc.).
+2. Copia `vercel.json` (ya incluido) o configura tu host para redirigir todas las rutas a `index.html`.
+3. Empuja a `main`; la plataforma detectará Vite y ejecutará `pnpm run build`.
+
+---
+
+## 🔧 Backend
+
+### Tecnologías
+
+* Node.js 18
+* Express 5
+* TypeScript
+* TypeORM
+* PostgreSQL (Railway, Heroku o tu propio servidor)
+* JWT para autenticación
+
+### Instalación
+
+```bash
+# En la carpeta del backend
+cd backend
+pnpm install    # o npm install / yarn
+```
+
+### Variables de entorno
+
+Crea un archivo `.env` en la raíz de `backend` con:
+
+```dotenv
+# Conexión a la base de datos PostgreSQL
+DATABASE_URL=postgres://user:password@host:port/dbname
+DB_SYNC=false       # false en producción
+DB_LOGGING=false    # false en producción
+
+# Autenticación
+JWT_SECRET=tuJwtSecret
+JWT_EXPIRES_IN=1d
+
+# Servidor
+PORT=3003
+NODE_ENV=development
+API_PREFIX=/api
+```
+
+> **En producción** (p.e. Railway) **no** definas `DB_HOST`, `DB_PORT`, etc.; solo `DATABASE_URL`.
+
+### Scripts
+
+| Comando      | Descripción                                              |
+| ------------ | -------------------------------------------------------- |
+| `pnpm build` | Transpila TS a `dist/`                                   |
+| `pnpm start` | Arranca tu app usando `dist/server.js`                   |
+| `pnpm dev`   | Levanta el servidor en modo desarrollo con `ts-node-dev` |
+
+### Deployment en Railway
+
+1. Sube tu repo y conecta GitHub en Railway.
+2. Configura **Pre-Deploy**: `pnpm install && pnpm run build`
+3. Configura **Start Command**: `pnpm start`
+4. En **Variables** del servicio, define únicamente:
+
+   * `DATABASE_URL` → `${{ Postgres.URL_DE_BASE_DE_DATOS }}`
+   * `DB_SYNC` → `false`
+   * `DB_LOGGING` → `false`
+   * `JWT_SECRET`, `JWT_EXPIRES_IN`, `API_PREFIX`, `NODE_ENV`, `PORT`.
+5. Deploy y comprueba logs.
+
+---
+
+## 📖 Uso
+
+1. Levanta el backend.
+2. Levanta el frontend.
+3. Regístrate e inicia sesión.
+4. Administra recetas: crea, lista, elimina.
+
+---
+
+## 🔗 Enlaces
+
+* [Repositorio Frontend](https://github.com/galoss88/test-terrand-front)
+* [Repositorio Backend](https://github.com/galoss88/test-terrand-back)
