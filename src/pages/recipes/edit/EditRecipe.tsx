@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -8,7 +8,7 @@ import {
   LoadingButton,
   MaterialButton,
 } from "@/components/Material/MaterialButton";
-import { StyledContainer, StyledPaper } from "@/pages/auth/styles";
+import { StyledContainer, StyledPaper, StyledText } from "@/pages/auth/styles";
 
 // Hooks
 import { useFetch } from "@/hooks/useFetch";
@@ -179,17 +179,11 @@ export const EditRecipe = () => {
 
   return (
     <StyledContainer maxWidth={false} sx={{ height: "100%" }}>
-      <LinkButton href="/myRecipes">Volver mis recetas</LinkButton>
-
       <StyledPaper elevation={3} sx={{ height: "100%", overflowY: "auto" }}>
-        <Typography
-          component="h1"
-          variant="h5"
-          color="rgba(255, 255, 255, 0.9)"
-          mb={2}
-        >
+        <StyledText variant="h5" color="rgba(255, 255, 255, 0.9)" mb={2}>
           Editar receta
-        </Typography>
+        </StyledText>
+        <LinkButton href="/myRecipes">Volver mis recetas</LinkButton>
 
         <form
           style={{
