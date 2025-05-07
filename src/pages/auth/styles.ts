@@ -14,7 +14,6 @@ export const StyledContainer = styled(Container)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   padding: theme.spacing(3),
-  background: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.background.default} 100%)`,
   backgroundAttachment: "fixed",
 }));
 

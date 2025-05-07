@@ -8,8 +8,6 @@ const Layout = () => {
       display: 'flex', 
       flexDirection: 'column', 
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #F4F1DE 0%, #F8F8F0 100%)',
-      backgroundAttachment: 'fixed',
     }}>
       <Header />
       <Box 
