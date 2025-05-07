@@ -6,42 +6,44 @@ import { memo, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { IRecipe } from "../types";
 
-const RecipeItem = ({
-  recipe,
-  onEdit = () => {},
-  onDetail = () => {},
-}: {
-  recipe: IRecipe;
-  onEdit?: (recipeId: string | number) => void;
-  onDetail?: (recipeId: string | number) => void;
-}) => {
-  return (
-    <MuiCard>
-      <MuiCard.Media image={recipe.image} alt={recipe.title} />
-      <MuiCard.Title sx={{ textAlign: "center" }}>{recipe.title}</MuiCard.Title>
-      <MuiCard.Content>
-        <MuiCard.Description>
-          <StyledText> {recipe.description}</StyledText>
-        </MuiCard.Description>
-        <MuiCard.Description>
-          {recipe.ingredients.map((ingredient, index) => {
-            return (
-              <p key={`${recipe.id}-ingredient-${index}`}>- {ingredient}</p>
-            );
-          })}
-        </MuiCard.Description>
-      </MuiCard.Content>
-      <MuiCard.Actions sx={{ justifyContent: "space-between" }}>
-        <MaterialButton onClick={() => onEdit(recipe.id)}>
-          Editar
-        </MaterialButton>
-        <MaterialButton onClick={() => onDetail(recipe.id)}>
-          Ver detalle
-        </MaterialButton>
-      </MuiCard.Actions>
-    </MuiCard>
-  );
-};
+const RecipeItem = memo(
+  ({
+    recipe,
+    onEdit = () => {},
+    onDetail = () => {},
+  }: {
+    recipe: IRecipe;
+    onEdit?: (recipeId: string | number) => void;
+    onDetail?: (recipeId: string | number) => void;
+  }) => {
+    return (
+      <MuiCard>
+        <MuiCard.Media image={recipe.image} alt={recipe.title} />
+        <MuiCard.Title sx={{ textAlign: "center" }}>
+          {recipe.title}
+        </MuiCard.Title>
+        <MuiCard.Content>
+          <MuiCard.Description>{recipe.description}</MuiCard.Description>
+          <MuiCard.Description>
+            {recipe.ingredients.map((ingredient, index) => {
+              return (
+                <li key={`${recipe.id}-ingredient-${index}`}>{ingredient}</li>
+              );
+            })}
+          </MuiCard.Description>
+        </MuiCard.Content>
+        <MuiCard.Actions sx={{ justifyContent: "space-between" }}>
+          <MaterialButton onClick={() => onEdit(recipe.id)}>
+            Editar
+          </MaterialButton>
+          <MaterialButton onClick={() => onDetail(recipe.id)}>
+            Ver detalle
+          </MaterialButton>
+        </MuiCard.Actions>
+      </MuiCard>
+    );
+  }
+);
 
 export const ListRecipesComponent = ({ recipes }: { recipes: IRecipe[] }) => {
   const navigate = useNavigate();
@@ -61,7 +63,7 @@ export const ListRecipesComponent = ({ recipes }: { recipes: IRecipe[] }) => {
   );
 
   if (recipes.length === 0) {
-    return <p>No hay recetas</p>;
+    return <StyledText>No hay recetas</StyledText>;
   }
   return (
     <Grid container spacing={2} justifyContent="flex-start">
