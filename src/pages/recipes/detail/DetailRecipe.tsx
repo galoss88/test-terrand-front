@@ -4,6 +4,7 @@ import {
 } from "@/components/Material/MaterialButton";
 import { MuiLoading } from "@/components/Material/MuiLoading";
 import { useFetch } from "@/hooks/useFetch";
+import { StyledContainer, StyledText } from "@/pages/auth/styles";
 import { recipeServiceParams } from "@/services/recipes/recipesService";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -30,7 +31,8 @@ const DetailRecipe = () => {
 
   if (error) {
     return (
-      <Box
+      <StyledContainer
+        maxWidth={false}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -40,9 +42,9 @@ const DetailRecipe = () => {
           gap: 2,
         }}
       >
-        <Typography variant="h6" sx={{ color: "rgba(35, 35, 50, 0.8)" }}>
+        <StyledText variant="h6" sx={{ color: "rgba(35, 35, 50, 0.8)" }}>
           Ocurrió un error al cargar el detalle de la receta
-        </Typography>
+        </StyledText>
         <MaterialButton
           onClick={() => refetch()}
           variant="contained"
@@ -50,7 +52,7 @@ const DetailRecipe = () => {
         >
           Recargar datos
         </MaterialButton>
-      </Box>
+      </StyledContainer>
     );
   }
 
@@ -130,7 +132,7 @@ const DetailRecipe = () => {
           flexDirection: { xs: "column", md: "row" },
           gap: { xs: 3, md: 4 },
           width: "100%",
-          backgroundColor: "rgba(35, 35, 50, 0.75)",
+          backgroundColor: theme.palette.primary.light,
           borderRadius: "16px",
           overflow: "hidden",
           boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
@@ -170,27 +172,25 @@ const DetailRecipe = () => {
           }}
         >
           <Box>
-            <Typography
+            <StyledText
               variant={isMobile ? "h5" : "h4"}
               sx={{
-                color: "white",
                 fontWeight: 600,
                 mb: 2,
               }}
             >
               {dataDetail.title}
-            </Typography>
+            </StyledText>
 
-            <Typography
+            <StyledText
               variant="body1"
               sx={{
-                color: "rgba(255, 255, 255, 0.9)",
                 mb: 3,
                 lineHeight: 1.6,
               }}
             >
               {dataDetail.description}
-            </Typography>
+            </StyledText>
           </Box>
 
           <Box
@@ -199,15 +199,13 @@ const DetailRecipe = () => {
               alignItems: "center",
               gap: 1,
               color: theme.palette.primary.main,
+              justifyContent: "flex-start",
             }}
           >
             <AccessTimeIcon />
-            <Typography
-              variant="body2"
-              sx={{ color: "rgba(255, 255, 255, 0.8)" }}
-            >
+            <StyledText variant="body2" sx={{ textAlign: "flex-end" }}>
               Tiempo estimado: {estimatedTime} minutos
-            </Typography>
+            </StyledText>
           </Box>
         </Box>
       </Box>
@@ -228,7 +226,7 @@ const DetailRecipe = () => {
             flex: 1,
             padding: 3,
             borderRadius: "12px",
-            backgroundColor: "rgba(35, 35, 50, 0.75)",
+            backgroundColor: theme.palette.primary.light,
             backdropFilter: "blur(10px)",
             boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
           }}
@@ -246,15 +244,14 @@ const DetailRecipe = () => {
             <RestaurantIcon
               sx={{ color: theme.palette.primary.main, fontSize: 28 }}
             />
-            <Typography
+            <StyledText
               variant="h6"
               sx={{
-                color: "white",
                 fontWeight: 600,
               }}
             >
               Ingredientes
-            </Typography>
+            </StyledText>
           </Box>
 
           <Box
@@ -277,7 +274,6 @@ const DetailRecipe = () => {
                     index !== dataDetail.ingredients.length - 1
                       ? "1px solid rgba(255, 255, 255, 0.1)"
                       : "none",
-                  color: "rgba(255, 255, 255, 0.9)",
                 }}
               >
                 <Box
@@ -310,7 +306,7 @@ const DetailRecipe = () => {
             flex: 1.5,
             padding: 3,
             borderRadius: "12px",
-            backgroundColor: "rgba(35, 35, 50, 0.75)",
+            backgroundColor: theme.palette.primary.light,
             backdropFilter: "blur(10px)",
             boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
           }}
@@ -328,15 +324,14 @@ const DetailRecipe = () => {
             <AccessTimeIcon
               sx={{ color: theme.palette.primary.main, fontSize: 28 }}
             />
-            <Typography
+            <StyledText
               variant="h6"
               sx={{
-                color: "white",
                 fontWeight: 600,
               }}
             >
               Preparación
-            </Typography>
+            </StyledText>
           </Box>
 
           <Box
@@ -351,18 +346,32 @@ const DetailRecipe = () => {
                 component="li"
                 key={`${instruction}-${index}`}
                 sx={{
-                  padding: "12px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "10px 0",
                   borderBottom:
-                    index !== dataDetail.instructions.length - 1
+                    index !== dataDetail.ingredients.length - 1
                       ? "1px solid rgba(255, 255, 255, 0.1)"
                       : "none",
-                  color: "rgba(255, 255, 255, 0.9)",
-                  "&::marker": {
-                    color: theme.palette.primary.main,
-                    fontWeight: "bold",
-                  },
                 }}
               >
+                <Box
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: "50%",
+                    backgroundColor: theme.palette.primary.main,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mr: 2,
+                    color: "white",
+                    fontSize: "0.8rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {index + 1}
+                </Box>
                 {instruction}
               </Box>
             ))}

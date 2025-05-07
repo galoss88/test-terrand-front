@@ -100,7 +100,6 @@ export const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
 export const StyledText = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.contrastText,
-  marginBottom: theme.spacing(2),
   fontWeight: 500,
 }));
 
