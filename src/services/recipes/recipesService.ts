@@ -2,7 +2,6 @@ import { IRecipe } from "@/pages/recipes/myRecipes/types";
 import { fetchApi, FetchParams } from "@/utils/api";
 import { apiUrl } from "../baseUrl";
 import { imageUploadService } from "../images/imageUploadService";
-
 export const recipeServiceParams = {
   getAllById(): FetchParams {
     const url = `${apiUrl}/private/recipes`;
@@ -12,7 +11,15 @@ export const recipeServiceParams = {
     };
     return params;
   },
-
+  create(): FetchParams {
+    const paramsCreate = {
+      url: `http://localhost:3000/private/recipes/create`,
+      method: "POST",
+    };
+    return paramsCreate;
+  },
+};
+export const recipeService = {
   getById(id: number | string): Promise<IRecipe> {
     const idRecipeToGet = id;
     return fetchApi<IRecipe>({
@@ -31,11 +38,9 @@ export const recipeServiceParams = {
     });
   },
 
-  create({ body }: { body: Omit<IRecipe, "id"> }): Promise<IRecipe> {
-    const idUser = "1";
-    return fetchApi<IRecipe>({
-      url: `http://localhost:3000/recipes?id=${idUser}`,
-      method: "POST",
+  async create({ body }: { body: Omit<IRecipe, "id"> }): Promise<IRecipe> {
+    return await fetchApi<IRecipe>({
+      ...recipeServiceParams.create(),
       body: body,
     });
   },

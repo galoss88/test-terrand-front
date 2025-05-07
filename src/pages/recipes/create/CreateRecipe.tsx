@@ -7,34 +7,61 @@ import { useForm } from "@/hooks";
 import {
   StyledContainer,
   StyledPaper,
+  StyledText,
   StyledTextField,
 } from "@/pages/auth/styles";
-import { recipeServiceParams } from "@/services/recipes/recipesService";
+import { imageUploadService } from "@/services/images/imageUploadService";
+import { recipeService } from "@/services/recipes/recipesService";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
+
 const initialValues = {
   title: "",
-  image: "",
+  image: "", // aquí guardaremos SOLO la URL, no el File
   description: "",
   instructions: [""],
   ingredients: [""],
 };
+
+type InitialValues = typeof initialValues;
+
 const CreateRecipe = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [error, setError] = useState<string>();
+  // nuevo estado para almacenar el File que selecciona el usuario
+  const [file, setFile] = useState<File | null>(null);
+
   const formRecipe = useForm({ initialValues });
 
-  const onSubmitRecipe = () => {
-    const body = formRecipe.values;
-    recipeServiceParams.create({ body });
-    // const url = "http://localhost:3000/recipes";
-    // const idUser = 1;
-    // const response = fetch(`${url}?id=${idUser}`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(formRecipe.values),
-    // });
+  const onSubmitRecipe = async (values: InitialValues) => {
+    setLoadingSubmit(true);
+    setError(undefined);
+
+    try {
+      let imageUrl = values.image;
+      if (file) {
+        const uploadResult = await imageUploadService.uploadImage(file);
+        if (!uploadResult.success) {
+          throw new Error(uploadResult.error || "Error al subir la imagen");
+        }
+        imageUrl = uploadResult.url;
+      }
+
+      const body = {
+        ...values,
+        image: imageUrl,
+      };
+
+      // 3. Llamamos al servicio de creación
+      await recipeService.create({ body });
+
+      // aquí podrías redirigir, limpiar formulario, etc.
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "Falló la creación de la receta.");
+    } finally {
+      setLoadingSubmit(false);
+    }
   };
 
   return (
@@ -48,6 +75,8 @@ const CreateRecipe = () => {
         >
           Crear receta
         </Typography>
+
+        {error && <StyledText color="error">{error}</StyledText>}
 
         <form
           style={{
@@ -68,31 +97,20 @@ const CreateRecipe = () => {
               width: "100%",
             }}
           >
-            {/* Primer columna */}
-
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                flex: 0.5,
-              }}
-            >
-              <StyledTextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="image"
+            {/* Input de fichero */}
+            <Box sx={{ flex: 0.5 }}>
+              <input
                 type="file"
-                id="image"
-                autoComplete="current-image"
-                onChange={formRecipe.handleChange}
-                value={formRecipe.values.image}
-                error={!!formRecipe.errors.image}
-                helperText={formRecipe.errors.image}
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files?.[0]) {
+                    setFile(e.target.files[0]);
+                  }
+                }}
               />
             </Box>
-            {/* Segunda columna */}
+
+            {/* Título y descripción */}
             <Box sx={{ display: "flex", flex: 1, flexDirection: "column" }}>
               <StyledTextField
                 variant="outlined"
@@ -100,7 +118,7 @@ const CreateRecipe = () => {
                 required
                 fullWidth
                 id="title"
-                label="Titulo"
+                label="Título"
                 name="title"
                 autoComplete="title"
                 autoFocus
@@ -117,8 +135,6 @@ const CreateRecipe = () => {
                 id="description"
                 label="Descripción"
                 name="description"
-                autoComplete="title"
-                autoFocus
                 onChange={formRecipe.handleChange}
                 value={formRecipe.values.description}
                 error={!!formRecipe.errors.description}
@@ -127,78 +143,53 @@ const CreateRecipe = () => {
             </Box>
           </Box>
 
-          <Box sx={{ display: "flex", flex: 1, width: "100%", gap: { xs: 2 } }}>
-            <Box
-              sx={{
-                flexDirection: "column",
-                flex: 0.5,
-              }}
-            >
-              {formRecipe?.values?.ingredients?.map?.((ingredient, index) => {
-                return (
-                  <Box component="section" sx={{ display: "flex" }} key={index}>
-                    <StyledTextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="ingredients"
-                      label="Ingrediente"
-                      type="text"
-                      id="ingredients"
-                      onChange={(e) => formRecipe.handleChange(e, index)}
-                      value={ingredient}
-                      error={!!formRecipe.errors.ingredients}
-                      helperText={formRecipe.errors.ingredients}
-                    />
-                    <DeleteButton
-                      onClick={() =>
-                        formRecipe.deleteData("ingredients", index)
-                      }
-                      sx={styles.buttonDelete}
-                    >
-                      X
-                    </DeleteButton>
-                  </Box>
-                );
-              })}
+          {/* Ingredientes e instrucciones (igual que antes) */}
+          <Box sx={{ display: "flex", flex: 1, width: "100%", gap: 2 }}>
+            <Box sx={{ flex: 0.5, flexDirection: "column" }}>
+              {formRecipe.values.ingredients.map((ing, i) => (
+                <Box key={i} sx={{ display: "flex" }}>
+                  <StyledTextField
+                    name="ingredients"
+                    label="Ingrediente"
+                    onChange={(e) => formRecipe.handleChange(e, i)}
+                    value={ing}
+                    error={!!formRecipe.errors.ingredients}
+                    helperText={formRecipe.errors.ingredients}
+                    fullWidth
+                  />
+                  <DeleteButton
+                    onClick={() => formRecipe.deleteData("ingredients", i)}
+                    sx={styles.buttonDelete}
+                  >
+                    X
+                  </DeleteButton>
+                </Box>
+              ))}
               <MaterialButton onClick={() => formRecipe.addItem("ingredients")}>
                 +
               </MaterialButton>
             </Box>
-            <Box
-              component="section"
-              sx={{ flexDirection: "column", flex: 0.5 }}
-            >
-              {formRecipe?.values?.instructions?.map?.((instruction, index) => {
-                return (
-                  <Box component="section" sx={{ display: "flex" }} key={index}>
-                    <StyledTextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="instructions"
-                      label="Instrucciones"
-                      type="text"
-                      id="instructions"
-                      onChange={(e) => formRecipe.handleChange(e, index)}
-                      value={instruction}
-                      error={!!formRecipe.errors.instructions}
-                      helperText={formRecipe.errors.instructions}
-                      key={index}
-                    />
-                    <DeleteButton
-                      onClick={() =>
-                        formRecipe.deleteData("instructions", index)
-                      }
-                      sx={styles.buttonDelete}
-                    >
-                      X
-                    </DeleteButton>
-                  </Box>
-                );
-              })}
+
+            <Box sx={{ flex: 0.5, flexDirection: "column" }}>
+              {formRecipe.values.instructions.map((ins, i) => (
+                <Box key={i} sx={{ display: "flex" }}>
+                  <StyledTextField
+                    name="instructions"
+                    label="Instrucción"
+                    onChange={(e) => formRecipe.handleChange(e, i)}
+                    value={ins}
+                    error={!!formRecipe.errors.instructions}
+                    helperText={formRecipe.errors.instructions}
+                    fullWidth
+                  />
+                  <DeleteButton
+                    onClick={() => formRecipe.deleteData("instructions", i)}
+                    sx={styles.buttonDelete}
+                  >
+                    X
+                  </DeleteButton>
+                </Box>
+              ))}
               <MaterialButton
                 onClick={() => formRecipe.addItem("instructions")}
               >
@@ -215,7 +206,7 @@ const CreateRecipe = () => {
             disabled={loadingSubmit}
             textWhenNotLoading="Crear receta"
             loadingText="Creando receta..."
-          ></LoadingButton>
+          />
         </form>
       </StyledPaper>
     </StyledContainer>
@@ -228,6 +219,6 @@ const styles = {
   buttonDelete: {
     color: "red",
     backgroundColor: "transparent",
-    "& hover": { color: "blue" },
+    "&:hover": { color: "blue" },
   },
 };

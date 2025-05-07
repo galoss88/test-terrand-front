@@ -1,5 +1,5 @@
 // useImageUpload.ts - Hook específico para carga de imágenes
-import { recipeServiceParams } from "@/services/recipes/recipesService";
+import { recipeService } from "@/services/recipes/recipesService";
 import { useState } from "react";
 
 interface UseImageUploadProps {
@@ -23,7 +23,7 @@ export const useImageUpload = ({
     setImgError(false);
 
     try {
-      const imageUrl = await recipeServiceParams.uploadImage(file);
+      const imageUrl = await recipeService.uploadImage(file);
 
       setImagePreview(imageUrl);
 
