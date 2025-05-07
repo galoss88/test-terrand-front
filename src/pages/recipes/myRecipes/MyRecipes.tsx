@@ -1,7 +1,8 @@
 import { MaterialButton } from "@/components/Material/MaterialButton";
+import { MuiLoading } from "@/components/Material/MuiLoading";
 import { useFetch } from "@/hooks/useFetch";
 import { recipeServiceParams } from "@/services/recipes/recipesService";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ListRecipes } from "./components";
 import { IRecipe } from "./types";
 
@@ -14,28 +15,7 @@ const MyRecipes = () => {
   } = useFetch<IRecipe[]>(recipeServiceParams.getAllById());
 
   if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "60vh",
-        }}
-      >
-        <CircularProgress color="primary" size={48} thickness={4} />
-        <Typography
-          sx={{
-            mt: 3,
-            color: "rgba(35, 35, 50, 0.8)",
-            fontWeight: 500,
-          }}
-        >
-          Cargando tus recetas...
-        </Typography>
-      </Box>
-    );
+    return <MuiLoading>Cargando Receta</MuiLoading>;
   }
 
   if (error) {
