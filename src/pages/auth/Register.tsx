@@ -12,6 +12,7 @@ import {
   StyledAvatar,
   StyledContainer,
   StyledPaper,
+  StyledText,
   StyledTextField,
   StyledTextModal,
 } from "./styles";
@@ -116,14 +117,9 @@ const Register = () => {
 
       <StyledPaper elevation={3}>
         <StyledAvatar>T</StyledAvatar>
-        <Typography
-          component="h1"
-          variant="h5"
-          color="rgba(255, 255, 255, 0.9)"
-          mb={2}
-        >
+        <StyledText variant="h5" color="rgba(255, 255, 255, 0.9)" mb={2}>
           Registrar usuario
-        </Typography>
+        </StyledText>
 
         {/* Mensaje de error */}
         {errorMessage && (

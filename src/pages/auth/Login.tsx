@@ -272,14 +272,7 @@ const Login = () => {
           >
             <LinkButton
               href={"/auth/register"}
-              sx={{
-                fontSize: "0.9rem",
-                fontWeight: 500,
-                "&:hover": {
-                  textDecoration: "underline",
-                  color: "none",
-                },
-              }}
+            
             >
               ¿No tienes cuenta? Regístrate
             </LinkButton>
