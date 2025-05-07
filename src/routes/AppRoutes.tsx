@@ -1,3 +1,4 @@
+import { MuiLoading } from "@/components/Material/MuiLoading";
 import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router";
 
@@ -45,5 +46,7 @@ export const AppRoutes = () => {
 
   const routes = useRoutes(routesConfig);
 
-  return <Suspense fallback={<div>Loading...</div>}>{routes}</Suspense>;
+  return (
+    <Suspense fallback={<MuiLoading>Cargando</MuiLoading>}>{routes}</Suspense>
+  );
 };
