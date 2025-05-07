@@ -24,8 +24,10 @@ const RecipeItem = ({
           <StyledText> {recipe.description}</StyledText>
         </MuiCard.Description>
         <MuiCard.Description>
-          {recipe.ingredients.map((ingredient) => {
-            return <p key={ingredient}>- {ingredient}</p>;
+          {recipe.ingredients.map((ingredient, index) => {
+            return (
+              <p key={`${recipe.id}-ingredient-${index}`}>- {ingredient}</p>
+            );
           })}
         </MuiCard.Description>
       </MuiCard.Content>
