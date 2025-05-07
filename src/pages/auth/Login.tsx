@@ -3,6 +3,7 @@ import {
   LoadingButton,
 } from "@/components/Material/MaterialButton";
 import { useForm } from "@/hooks";
+import { apiUrl } from "@/services/baseUrl";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -46,9 +47,8 @@ const Login = () => {
   const onSubmitLogin = async (values: InitialValues) => {
     setLoadingSubmit(true);
     try {
-      const url = "http://localhost:3000/users";
-      const idUser = "1";
-      const response = await fetch(`${url}?id=${idUser}`, {
+      const url = `${apiUrl}/public/auth/login`;
+      const response = await fetch(`${url}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,8 +56,8 @@ const Login = () => {
         body: JSON.stringify(values),
       });
       const data = await response.json();
-      console.log("data", data);
-     navigate("/");
+      localStorage.setItem("userLogin", JSON.stringify(data));
+      navigate("/");
     } catch (error) {
       console.error("Error:", error);
     } finally {
