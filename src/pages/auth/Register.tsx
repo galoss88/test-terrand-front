@@ -5,6 +5,7 @@ import {
 } from "@/components/Material/MaterialButton";
 import { MaterialModal } from "@/components/Material/MaterialModal";
 import { useForm } from "@/hooks";
+import { apiUrl } from "@/services/baseUrl";
 import { Typography } from "@mui/material";
 import { useState } from "react";
 import {
@@ -55,7 +56,8 @@ const Register = () => {
   const onSubmitLogin = async (values: InitialValues) => {
     setLoadingSubmit(true);
     try {
-      const url = "http://localhost:3000/users";
+      const url = `${apiUrl}/public/auth/register`;
+
       //Quitamos espacios en blanco al inicio y al final
       values.email = values.email.trim();
       values.password = values.password.trim();
@@ -96,9 +98,7 @@ const Register = () => {
             </StyledTextModal>
           </MaterialModal.Header>
           <MaterialModal.Content>
-            <LinkButton href={"/auth/login"}>
-              Iniciar Sesión
-            </LinkButton>
+            <LinkButton href={"/auth/login"}>Iniciar Sesión</LinkButton>
             <MaterialButton onClick={onCloseModal}>
               Crear otro usuario
             </MaterialButton>
