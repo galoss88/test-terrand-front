@@ -102,29 +102,8 @@ const DetailRecipe = () => {
         gap: 3,
       }}
     >
-      <LinkButton
-        href="/myRecipes"
-        sx={{
-          alignSelf: "flex-start",
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          mb: 2,
-          px: 2,
-          py: 1,
-          backgroundColor: "rgba(35, 35, 50, 0.05)",
-          borderRadius: "8px",
-          transition: "all 0.2s",
-          "&:hover": {
-            backgroundColor: "rgba(35, 35, 50, 0.1)",
-            transform: "translateX(-5px)",
-          },
-        }}
-      >
-        <ArrowBackIcon fontSize="small" />
-        Volver a mis recetas
-      </LinkButton>
 
+   
       {/* Cabecera: imagen, título y descripción */}
       <Box
         sx={{
@@ -146,6 +125,28 @@ const DetailRecipe = () => {
             minHeight: { md: "350px" },
           }}
         >
+             <LinkButton
+        href="/myRecipes"
+        sx={{
+          alignSelf: "flex-start",
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          mb: 2,
+          px: 2,
+          py: 1,
+          backgroundColor: "rgba(35, 35, 50, 0.05)",
+          borderRadius: "8px",
+          transition: "all 0.2s",
+          "&:hover": {
+            backgroundColor: "rgba(35, 35, 50, 0.1)",
+            transform: "translateX(-5px)",
+          },
+        }}
+      >
+        <ArrowBackIcon fontSize="small" />
+        Volver a mis recetas
+      </LinkButton>
           <Box
             component="img"
             src={

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -24,6 +24,7 @@ import {
 // Types
 import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
 import { fetchApi } from "@/utils/api";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ImageUploadSection from "../components/ImageUploadSection";
 import RecipeFieldsSection from "../components/RecipeFieldsSection";
 import RecipeListSection from "../components/RecipeListSection";
@@ -76,7 +77,6 @@ export const EditRecipe = () => {
     loadingImage,
     setLoadingImage,
     clearSelection,
-    // setImgError,
     setLocalPreview,
     cleanup,
   } = imageSelectionProps;
@@ -159,31 +159,102 @@ export const EditRecipe = () => {
   };
 
   if (loading) {
-    return <Box>Cargando receta...</Box>;
+    return (
+      <Container sx={{ py: 3, height: "100%" }}>
+        <StyledPaper
+          elevation={3}
+          sx={{
+            p: 3,
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <StyledText>Cargando receta...</StyledText>
+        </StyledPaper>
+      </Container>
+    );
   }
 
   if (error) {
     return (
-      <Box>
-        Ocurrió un error al traer la receta a editar
-        <MaterialButton onClick={() => refetch()}>
-          Recargar datos
-        </MaterialButton>
-      </Box>
+      <Container sx={{ py: 3, height: "100%" }}>
+        <StyledPaper
+          elevation={3}
+          sx={{
+            p: 3,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            alignItems: "center",
+          }}
+        >
+          <StyledText>Ocurrió un error al traer la receta a editar</StyledText>
+          <MaterialButton onClick={() => refetch()}>
+            Recargar datos
+          </MaterialButton>
+        </StyledPaper>
+      </Container>
     );
   }
 
   const placeholder =
-    "https://via.placeholder.com/150?text=Sin+previsualizaci%C3%B3n";
+    "https://via.placeholder.com/400x200?text=Sin+previsualizaci%C3%B3n";
   const imageToShow = imgError ? placeholder : localPreview || placeholder;
 
   return (
-    <Box sx={{ height: "100%" }}>
-      <StyledPaper elevation={3} sx={{ height: "100%", overflowY: "auto" }}>
-        <StyledText variant="h5" color="rgba(255, 255, 255, 0.9)" mb={2}>
-          Editar receta
-        </StyledText>
-        <LinkButton href="/myRecipes">Volver mis recetas</LinkButton>
+    <Box sx={{ py: 3, height: "100%" }}>
+      <StyledPaper
+        elevation={3}
+        sx={{ p: 3, height: "100%", overflowY: "auto" }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            width: "100%",
+            mb: 4,
+            position: "relative",
+            mt: 2,
+          }}
+        >
+          <Box sx={{ position: "absolute", left: 0, zIndex: 2 }}>
+            <LinkButton
+              href="/myRecipes"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                px: 2,
+                py: 1,
+                backgroundColor: "rgba(35, 35, 50, 0.05)",
+                borderRadius: "8px",
+                transition: "all 0.2s",
+                "&:hover": {
+                  backgroundColor: "rgba(35, 35, 50, 0.1)",
+                  transform: "translateX(-5px)",
+                },
+              }}
+            >
+              <ArrowBackIcon fontSize="small" />
+              Volver a mis recetas
+            </LinkButton>
+          </Box>
+
+          <StyledText
+            variant="h5"
+            sx={{
+              width: "100%",
+              textAlign: "center",
+              mx: "auto",
+            }}
+          >
+            Editar receta
+          </StyledText>
+        </Box>
 
         <form
           style={{
@@ -194,59 +265,67 @@ export const EditRecipe = () => {
           }}
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
-            {/* Sección de imagen */}
-            <ImageUploadSection
-              form={form}
-              handleImageUrlChange={handleImageUrlChange}
-              imageSelectionProps={imageSelectionProps}
-              imageToShow={imageToShow}
-            />
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 4, md: 6 }}>
+              <ImageUploadSection
+                form={form}
+                handleImageUrlChange={handleImageUrlChange}
+                imageSelectionProps={imageSelectionProps}
+                imageToShow={imageToShow}
+              />
+            </Grid>
 
-            {/* Sección de campos básicos */}
-            <RecipeFieldsSection form={form} />
+            <Grid size={{ xs: 12, sm: 8, md: 5 }}>
+              <RecipeFieldsSection form={form} />
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <RecipeListSection
+                title="Ingredientes"
+                name="ingredients"
+                items={form.values.ingredients}
+                errors={form.errors.ingredients}
+                onChange={form.handleChange}
+                onAdd={() => form.addItem("ingredients")}
+                onDelete={(idx) => form.deleteData("ingredients", idx)}
+                buttonText="+ Ingrediente"
+                fieldLabel="Ingrediente"
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6 }}>
+              <RecipeListSection
+                title="Instrucciones"
+                name="instructions"
+                items={form.values.instructions}
+                errors={form.errors.instructions}
+                onChange={form.handleChange}
+                onAdd={() => form.addItem("instructions")}
+                onDelete={(idx) => form.deleteData("instructions", idx)}
+                buttonText="+ Instrucción"
+                fieldLabel="Paso"
+                multiline
+                rows={2}
+              />
+            </Grid>
+          </Grid>
+
+          <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              isLoading={loadingSubmit || loadingImage}
+              disabled={loadingSubmit || loadingImage}
+              textWhenNotLoading="Guardar cambios"
+              loadingText="Actualizando..."
+              sx={{
+                width: { xs: "100%", sm: "75%", md: "50%" },
+                py: 1.5,
+              }}
+            />
           </Box>
-
-          <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
-            {/* Ingredientes */}
-            <RecipeListSection
-              title="Ingredientes"
-              name="ingredients"
-              items={form.values.ingredients}
-              errors={form.errors.ingredients}
-              onChange={form.handleChange}
-              onAdd={() => form.addItem("ingredients")}
-              onDelete={(idx) => form.deleteData("ingredients", idx)}
-              buttonText="+ Ingrediente"
-              fieldLabel="Ingrediente"
-            />
-
-            {/* Instrucciones */}
-            <RecipeListSection
-              title="Instrucciones"
-              name="instructions"
-              items={form.values.instructions}
-              errors={form.errors.instructions}
-              onChange={form.handleChange}
-              onAdd={() => form.addItem("instructions")}
-              onDelete={(idx) => form.deleteData("instructions", idx)}
-              buttonText="+ Instrucción"
-              fieldLabel="Paso"
-              multiline
-              rows={2}
-            />
-          </Box>
-
-          {/* Botón de envío */}
-          <LoadingButton
-            type="submit"
-            fullWidth
-            variant="contained"
-            isLoading={loadingSubmit || loadingImage}
-            disabled={loadingSubmit || loadingImage}
-            textWhenNotLoading="Guardar cambios"
-            loadingText="Actualizando..."
-          />
         </form>
       </StyledPaper>
     </Box>

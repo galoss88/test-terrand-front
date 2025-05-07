@@ -59,21 +59,18 @@ const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
         helperText={form.errors.image}
       />
 
-      {/* Usar el componente ImageUploadWithPreview para manejar la subida y vista previa */}
       <ImageUploadWithPreview
         imageSelectionProps={{
           selectedFile: imageSelectionProps.selectedFile,
           handleFileSelection: imageSelectionProps.handleFileSelection,
           clearSelection: imageSelectionProps.clearSelection,
-          setImgError: imageSelectionProps.setImgError
+          setImgError: imageSelectionProps.setImgError,
         }}
         imageToShow={imageToShow}
       />
-      
+
       {form.errors.image && (
-        <StyledText color="error">
-          {form.errors.image}
-        </StyledText>
+        <StyledText color="error">{form.errors.image}</StyledText>
       )}
     </Box>
   );

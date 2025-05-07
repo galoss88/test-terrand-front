@@ -1,4 +1,7 @@
-import { LoadingButton } from "@/components/Material/MaterialButton";
+import {
+  LinkButton,
+  LoadingButton,
+} from "@/components/Material/MaterialButton";
 
 import { useForm } from "@/hooks";
 import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
@@ -7,6 +10,7 @@ import { StyledPaper, StyledText } from "@/pages/auth/styles";
 import { imageUploadService } from "@/services/images/imageUploadService";
 import { recipeServiceParams } from "@/services/recipes/recipesService";
 import { fetchApi } from "@/utils/api";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box, Grid } from "@mui/material";
 import { useState } from "react";
 import ImageUploadSection from "../components/ImageUploadSection";
@@ -127,9 +131,51 @@ const CreateRecipe = () => {
   return (
     <Box sx={{ height: "100%" }}>
       <StyledPaper elevation={3} sx={{ p: 3, height: "100%", mt: 0 }}>
-        <StyledText variant="h5" mb={2} textAlign="center">
-          Crear receta
-        </StyledText>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            width: "100%",
+            mb: 4,
+            position: "relative",
+            mt: 2,
+          }}
+        >
+          <Box sx={{ position: "absolute", left: 0, zIndex: 2 }}>
+            <LinkButton
+              href="/myRecipes"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                px: 2,
+                py: 1,
+                backgroundColor: "rgba(35, 35, 50, 0.05)",
+                borderRadius: "8px",
+                transition: "all 0.2s",
+                "&:hover": {
+                  backgroundColor: "rgba(35, 35, 50, 0.1)",
+                  transform: "translateX(-5px)",
+                },
+              }}
+            >
+              <ArrowBackIcon fontSize="small" />
+              Volver a mis recetas
+            </LinkButton>
+          </Box>
+
+          <StyledText
+            variant="h5"
+            sx={{
+              width: "100%",
+              textAlign: "center",
+              mx: "auto",
+            }}
+          >
+            Crear receta
+          </StyledText>
+        </Box>
 
         {error && (
           <StyledText color="error" sx={{ mb: 2 }}>
