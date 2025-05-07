@@ -1,7 +1,7 @@
 import { MaterialButton } from "@/components/Material/MaterialButton";
 import { useFetch } from "@/hooks/useFetch";
 import { recipeServiceParams } from "@/services/recipes/recipesService";
-import { Box, Typography, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { ListRecipes } from "./components";
 import { IRecipe } from "./types";
 
@@ -17,19 +17,19 @@ const MyRecipes = () => {
     return (
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '60vh'
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "60vh",
         }}
       >
         <CircularProgress color="primary" size={48} thickness={4} />
-        <Typography 
-          sx={{ 
-            mt: 3, 
-            color: 'rgba(35, 35, 50, 0.8)',
-            fontWeight: 500
+        <Typography
+          sx={{
+            mt: 3,
+            color: "rgba(35, 35, 50, 0.8)",
+            fontWeight: 500,
           }}
         >
           Cargando tus recetas...
@@ -42,41 +42,42 @@ const MyRecipes = () => {
     return (
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '60vh',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "60vh",
           padding: 3,
-          textAlign: 'center'
+          textAlign: "center",
         }}
       >
-        <Typography 
-          variant="h5" 
-          sx={{ 
-            mb: 2, 
-            color: 'rgba(35, 35, 50, 0.9)',
-            fontWeight: 500
+        <Typography
+          variant="h5"
+          sx={{
+            mb: 2,
+            color: "rgba(35, 35, 50, 0.9)",
+            fontWeight: 500,
           }}
         >
           No pudimos cargar tus recetas
         </Typography>
-        <Typography 
-          sx={{ 
-            mb: 3, 
-            color: 'rgba(35, 35, 50, 0.7)',
-            maxWidth: 600
+        <Typography
+          sx={{
+            mb: 3,
+            color: "rgba(35, 35, 50, 0.7)",
+            maxWidth: 600,
           }}
         >
-          Ocurrió un error al intentar obtener tus recetas. Por favor, intenta nuevamente.
+          Ocurrió un error al intentar obtener tus recetas. Por favor, intenta
+          nuevamente.
         </Typography>
-        <MaterialButton 
+        <MaterialButton
           onClick={() => refetch()}
           variant="contained"
           sx={{
             px: 4,
             py: 1.2,
-            borderRadius: '12px'
+            borderRadius: "12px",
           }}
         >
           Recargar datos
@@ -89,41 +90,42 @@ const MyRecipes = () => {
     return (
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '60vh',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "60vh",
           padding: 3,
-          textAlign: 'center'
+          textAlign: "center",
         }}
       >
-        <Typography 
-          variant="h5" 
-          sx={{ 
-            mb: 2, 
-            color: 'rgba(35, 35, 50, 0.9)',
-            fontWeight: 500
+        <Typography
+          variant="h5"
+          sx={{
+            mb: 2,
+            color: "rgba(35, 35, 50, 0.9)",
+            fontWeight: 500,
           }}
         >
           Aún no tienes recetas creadas
         </Typography>
-        <Typography 
-          sx={{ 
-            mb: 3, 
-            color: 'rgba(35, 35, 50, 0.7)',
-            maxWidth: 600
+        <Typography
+          sx={{
+            mb: 3,
+            color: "rgba(35, 35, 50, 0.7)",
+            maxWidth: 600,
           }}
         >
-          ¡Empieza a crear tus recetas favoritas para guardarlas en tu colección!
+          ¡Empieza a crear tus recetas favoritas para guardarlas en tu
+          colección!
         </Typography>
-        <MaterialButton 
-          onClick={() => window.location.href = '/myRecipes/create'}
+        <MaterialButton
+          onClick={() => (window.location.href = "/myRecipes/create")}
           variant="contained"
           sx={{
             px: 4,
             py: 1.2,
-            borderRadius: '12px'
+            borderRadius: "12px",
           }}
         >
           Crear primera receta
@@ -131,27 +133,16 @@ const MyRecipes = () => {
       </Box>
     );
   }
-  
+
   return (
     <Box
       sx={{
-        width: '100%',
-        margin: '0 auto',
+        width: "100%",
+        margin: "0 auto",
         padding: { xs: 1, sm: 2, md: 3 },
-        borderRadius: '16px'
+        borderRadius: "16px",
       }}
     >
-      <Typography 
-        variant="h4" 
-        sx={{ 
-          mb: 3, 
-          color: 'rgba(35, 35, 50, 0.9)',
-          fontWeight: 600,
-          textAlign: { xs: 'center', sm: 'left' }
-        }}
-      >
-        Mis Recetas
-      </Typography>
       <ListRecipes recipes={recipes} />
     </Box>
   );
