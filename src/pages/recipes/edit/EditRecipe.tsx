@@ -200,8 +200,7 @@ export const EditRecipe = () => {
     );
   }
 
-  const placeholder =
-    "https://via.placeholder.com/400x200?text=Sin+previsualizaci%C3%B3n";
+  const placeholder = "";
   const imageToShow = imgError ? placeholder : localPreview || placeholder;
 
   return (

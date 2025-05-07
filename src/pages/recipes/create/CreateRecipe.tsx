@@ -74,10 +74,7 @@ const CreateRecipe = () => {
     setImgError(false);
   };
 
-  const imageToShow =
-    localPreview ||
-    formRecipe.values.image ||
-    "https://via.placeholder.com/400x200?text=No+Image";
+  const imageToShow = localPreview || formRecipe.values.image || "";
 
   const onSubmitRecipe = async (values: InitialValues) => {
     setLoadingSubmit(true);
