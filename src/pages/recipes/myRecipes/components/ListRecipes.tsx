@@ -2,7 +2,7 @@ import { MaterialButton } from "@/components/Material/MaterialButton";
 import { MuiCard } from "@/components/Material/MuiCard";
 import { StyledText } from "@/pages/auth/styles";
 import { Grid } from "@mui/material";
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { IRecipe } from "../types";
 
@@ -16,7 +16,7 @@ const RecipeItem = ({
   onDetail?: (recipeId: string | number) => void;
 }) => {
   return (
-    <MuiCard key={recipe.id}>
+    <MuiCard>
       <MuiCard.Media image={recipe.image} alt={recipe.title} />
       <MuiCard.Title sx={{ textAlign: "center" }}>{recipe.title}</MuiCard.Title>
       <MuiCard.Content>
@@ -41,7 +41,7 @@ const RecipeItem = ({
   );
 };
 
-export const ListRecipes = ({ recipes }: { recipes: IRecipe[] }) => {
+export const ListRecipesComponent = ({ recipes }: { recipes: IRecipe[] }) => {
   const navigate = useNavigate();
 
   const onEdit = useCallback(
@@ -64,10 +64,12 @@ export const ListRecipes = ({ recipes }: { recipes: IRecipe[] }) => {
   return (
     <Grid container spacing={2} justifyContent="flex-start">
       {recipes.map((recipe) => (
-        <Grid size={{ xl: 2 }} key={recipe.id}>
+        <Grid size={{ xl: 2 }} key={`recipe-${recipe.id}`}>
           <RecipeItem recipe={recipe} onEdit={onEdit} onDetail={onDetail} />
         </Grid>
       ))}
     </Grid>
   );
 };
+
+export const ListRecipes = memo(ListRecipesComponent);
