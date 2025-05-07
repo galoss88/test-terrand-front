@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 // Componentes
 import {
+  LinkButton,
   LoadingButton,
   MaterialButton,
 } from "@/components/Material/MaterialButton";
@@ -178,6 +179,8 @@ export const EditRecipe = () => {
 
   return (
     <StyledContainer maxWidth={false} sx={{ height: "100%" }}>
+      <LinkButton href="/myRecipes">Volver mis recetas</LinkButton>
+
       <StyledPaper elevation={3} sx={{ height: "100%", overflowY: "auto" }}>
         <Typography
           component="h1"

@@ -1,4 +1,4 @@
-import { MaterialButton } from "@/components/Material/MaterialButton";
+import { LinkButton, MaterialButton } from "@/components/Material/MaterialButton";
 import { MuiCard } from "@/components/Material/MuiCard";
 import { useFetch } from "@/hooks/useFetch";
 import { StyledContainer, StyledText } from "@/pages/auth/styles";
@@ -35,6 +35,7 @@ const DetailRecipe = () => {
       maxWidth={false}
       sx={{ gap: { xs: 1, md: 3 }, backgroundColor: "tranparent" }}
     >
+      <LinkButton href="/myRecipes">Volver mis recetas</LinkButton>
       {/* Seccion imagen con titulo y descripcion */}
       <Box
         sx={{
