@@ -1,14 +1,14 @@
 import { IRecipe } from "@/pages/recipes/myRecipes/types";
 import { fetchApi } from "@/utils/api";
+import { apiUrl } from "../baseUrl";
 import { imageUploadService } from "../images/imageUploadService";
 
 export const recipeService = {
-  getAllById(id: string): Promise<IRecipe[]> {
-    const url = "http://localhost:3000/recipes";
-    const idUser = id;
-
+  getAllById(): Promise<IRecipe[]> {
+    const url = `${apiUrl}/private/recipes`;
+    
     return fetchApi<IRecipe[]>({
-      url: `${url}?userId=${idUser}`,
+      url,
       method: "GET",
     });
   },

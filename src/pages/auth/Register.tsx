@@ -25,6 +25,8 @@ const initialValues = {
 
 type InitialValues = typeof initialValues;
 
+const limitLengthPassword = 8;
+
 const validate = (
   values: typeof initialValues
 ): Partial<Record<keyof typeof initialValues, string>> => {
@@ -46,42 +48,49 @@ const validate = (
 
   return errors;
 };
-const limitLengthPassword = 8;
 
 const Register = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const formLogin = useForm({ initialValues, validate });
 
   const onSubmitLogin = async (values: InitialValues) => {
     setLoadingSubmit(true);
+    setErrorMessage(null); // resetea cualquier error previo
+
     try {
       const url = `${apiUrl}/public/auth/register`;
 
-      //Quitamos espacios en blanco al inicio y al final
-      values.email = values.email.trim();
-      values.password = values.password.trim();
-      values.name = values.name.trim();
+      // Quitamos espacios en blanco
+      const payload = {
+        email: values.email.trim(),
+        password: values.password.trim(),
+        name: values.name.trim(),
+      };
 
       const response = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
+
       const data = await response.json();
 
-      if (data) {
-        return setRegisterSuccess(true);
+      if (response.ok) {
+        setRegisterSuccess(true);
+      } else {
+        setErrorMessage(data?.message || "Error al registrar el usuario");
       }
-      return data;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error:", error);
+      setErrorMessage("Ocurrió un error de red. Intenta nuevamente.");
     } finally {
       setLoadingSubmit(false);
     }
   };
+
   const onCloseModal = () => {
     formLogin.resetForm();
     setRegisterSuccess(false);
@@ -104,6 +113,7 @@ const Register = () => {
           </MaterialModal.Content>
         </MaterialModal.Container>
       </MaterialModal>
+
       <StyledPaper elevation={3}>
         <StyledAvatar>T</StyledAvatar>
         <Typography
@@ -114,6 +124,13 @@ const Register = () => {
         >
           Registrar usuario
         </Typography>
+
+        {/* Mensaje de error */}
+        {errorMessage && (
+          <Typography variant="body2" color="error" align="center" mb={2}>
+            {errorMessage}
+          </Typography>
+        )}
 
         <form
           style={{ width: "100%" }}
@@ -179,6 +196,7 @@ const Register = () => {
             error={!!formLogin.errors.repeatPassword}
             helperText={formLogin.errors.repeatPassword}
           />
+
           <LoadingButton
             type="submit"
             fullWidth
@@ -187,7 +205,7 @@ const Register = () => {
             disabled={loadingSubmit}
             textWhenNotLoading="Registrarse"
             loadingText="Registrando..."
-          ></LoadingButton>
+          />
 
           <LinkButton href={"/auth/login"}>Iniciar Sesión</LinkButton>
         </form>
