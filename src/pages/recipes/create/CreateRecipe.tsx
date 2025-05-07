@@ -5,6 +5,7 @@ import {
 } from "@/components/Material/MaterialButton";
 import { useForm } from "@/hooks";
 import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
+import { useNavigation } from "@/hooks/useNavigation";
 import {
   StyledContainer,
   StyledPaper,
@@ -19,7 +20,7 @@ import { useState } from "react";
 
 const initialValues = {
   title: "",
-  image: "", // aquí guardaremos SOLO la URL, no el File
+  image: "",
   description: "",
   instructions: [""],
   ingredients: [""],
@@ -31,9 +32,8 @@ const CreateRecipe = () => {
   const fetchWithAuth = useFetchWithAuth(fetchApi);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [error, setError] = useState<string>();
-  // nuevo estado para almacenar el File que selecciona el usuario
   const [file, setFile] = useState<File | null>(null);
-
+  const { goTo } = useNavigation();
   const formRecipe = useForm({ initialValues });
 
   const onSubmitRecipe = async (values: InitialValues) => {
@@ -58,6 +58,8 @@ const CreateRecipe = () => {
         ...recipeServiceParams.create(),
         body,
       });
+      formRecipe.resetForm();
+      goTo("/myRecipes");
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Falló la creación de la receta.");

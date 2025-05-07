@@ -136,7 +136,6 @@ const MyRecipes = () => {
     <Box
       sx={{
         width: '100%',
-        maxWidth: '1200px',
         margin: '0 auto',
         padding: { xs: 1, sm: 2, md: 3 },
         borderRadius: '16px'
