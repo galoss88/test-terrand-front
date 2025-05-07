@@ -6,12 +6,7 @@ import {
 import { useForm } from "@/hooks";
 import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
 import { useNavigation } from "@/hooks/useNavigation";
-import {
-  StyledContainer,
-  StyledPaper,
-  StyledText,
-  StyledTextField,
-} from "@/pages/auth/styles";
+import { StyledPaper, StyledText, StyledTextField } from "@/pages/auth/styles";
 import { imageUploadService } from "@/services/images/imageUploadService";
 import { recipeServiceParams } from "@/services/recipes/recipesService";
 import { fetchApi } from "@/utils/api";
@@ -72,8 +67,8 @@ const CreateRecipe = () => {
   };
 
   return (
-    <StyledContainer maxWidth={false} sx={{ height: "100%" }}>
-      <StyledPaper elevation={3} sx={{ height: "100%" }}>
+    <Box sx={{ height: "100%" }}>
+      <StyledPaper elevation={3} sx={{ height: "100%", mt: 0 }}>
         <Typography
           component="h1"
           variant="h5"
@@ -216,7 +211,7 @@ const CreateRecipe = () => {
           />
         </form>
       </StyledPaper>
-    </StyledContainer>
+    </Box>
   );
 };
 
