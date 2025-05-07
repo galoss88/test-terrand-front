@@ -1,130 +1,94 @@
-# 📚 Test-Terrand Project
+# 📚 Frontend - Test Terrand
 
-Este repositorio contiene dos aplicaciones separadas:
-
-* **Frontend**: Aplicación SPA construida con **React** y **Vite**.
-* **Backend**: API REST construida con **Node.js**, **Express**, **TypeScript** y **TypeORM** (PostgreSQL).
+Este README cubre exclusivamente la aplicación frontend de **Test Terrand**, construida con **React**, **Vite** y desplegada en **Vercel**.
 
 ---
 
-## 🚀 Frontend
+## 🛠 Tecnologías
 
-### Tecnologías
-
-* React 18
-* Vite
-* React Router
-* Material UI
-* Cloudinary (para subir imágenes)
-
-### Instalación
-
-```bash
-# En la carpeta del frontend
-cd frontend
-pnpm install    # o npm install / yarn
-```
-
-### Variables de entorno
-
-Crea un archivo `.env` en la raíz de `frontend` con las siguientes claves:
-
-```dotenv
-VITE_API_URL=https://tu-backend.example.com/api/v1
-VITE_CLOUDINARY_CLOUD_NAME=tuCloudName
-VITE_CLOUDINARY_UPLOAD_PRESET=tuUploadPreset
-```
-
-### Scripts
-
-| Comando        | Descripción                                              |
-| -------------- | -------------------------------------------------------- |
-| `pnpm dev`     | Levanta servidor de desarrollo (`http://localhost:5173`) |
-| `pnpm build`   | Genera la carpeta `dist/` para producción                |
-| `pnpm preview` | Sirve localmente el build estático                       |
-
-### Deployment
-
-1. Asegúrate de configurar las variables de entorno en tu proveedor (Vercel, Netlify, etc.).
-2. Copia `vercel.json` (ya incluido) o configura tu host para redirigir todas las rutas a `index.html`.
-3. Empuja a `main`; la plataforma detectará Vite y ejecutará `pnpm run build`.
+* **React 18**
+* **Vite**
+* **React Router**
+* **Material UI**
+* **Cloudinary** para subir imágenes
 
 ---
 
-## 🔧 Backend
+## 🚀 Instalación y Desarrollo Local
 
-### Tecnologías
+1. **Clona el repositorio**
 
-* Node.js 18
-* Express 5
-* TypeScript
-* TypeORM
-* PostgreSQL (Railway, Heroku o tu propio servidor)
-* JWT para autenticación
+   ```bash
+   git clone https://github.com/galoss88/test-terrand-front.git
+   cd test-terrand-front
+   ```
 
-### Instalación
+2. **Instala dependencias**
 
-```bash
-# En la carpeta del backend
-cd backend
-pnpm install    # o npm install / yarn
-```
+   ```bash
+   pnpm install
+   # o npm install / yarn install
+   ```
 
-### Variables de entorno
+3. **Variables de entorno**
 
-Crea un archivo `.env` en la raíz de `backend` con:
+   Crea un archivo `.env` en la raíz con:
 
-```dotenv
-# Conexión a la base de datos PostgreSQL
-DATABASE_URL=postgres://user:password@host:port/dbname
-DB_SYNC=false       # false en producción
-DB_LOGGING=false    # false en producción
+   ```dotenv
+   VITE_API_URL=https://<tu-backend-url>/api/v1
+   VITE_CLOUDINARY_CLOUD_NAME=tuCloudName
+   VITE_CLOUDINARY_UPLOAD_PRESET=tuUploadPreset
+   ```
 
-# Autenticación
-JWT_SECRET=tuJwtSecret
-JWT_EXPIRES_IN=1d
+4. **Levanta el servidor de desarrollo**
 
-# Servidor
-PORT=3003
-NODE_ENV=development
-API_PREFIX=/api
-```
+   ```bash
+   pnpm dev
+   ```
 
-> **En producción** (p.e. Railway) **no** definas `DB_HOST`, `DB_PORT`, etc.; solo `DATABASE_URL`.
+   Luego abre [http://localhost:5173](http://localhost:5173) en tu navegador.
 
-### Scripts
+---
 
-| Comando      | Descripción                                              |
-| ------------ | -------------------------------------------------------- |
-| `pnpm build` | Transpila TS a `dist/`                                   |
-| `pnpm start` | Arranca tu app usando `dist/server.js`                   |
-| `pnpm dev`   | Levanta el servidor en modo desarrollo con `ts-node-dev` |
+## 🏗️ Scripts disponibles
 
-### Deployment en Railway
+| Comando        | Descripción                               |
+| -------------- | ----------------------------------------- |
+| `pnpm dev`     | Inicia el servidor de desarrollo          |
+| `pnpm build`   | Genera la carpeta `dist/` para producción |
+| `pnpm preview` | Sirve localmente el build estático        |
 
-1. Sube tu repo y conecta GitHub en Railway.
-2. Configura **Pre-Deploy**: `pnpm install && pnpm run build`
-3. Configura **Start Command**: `pnpm start`
-4. En **Variables** del servicio, define únicamente:
+---
 
-   * `DATABASE_URL` → `${{ Postgres.URL_DE_BASE_DE_DATOS }}`
-   * `DB_SYNC` → `false`
-   * `DB_LOGGING` → `false`
-   * `JWT_SECRET`, `JWT_EXPIRES_IN`, `API_PREFIX`, `NODE_ENV`, `PORT`.
-5. Deploy y comprueba logs.
+## ☁️ Despliegue en Vercel
+
+1. Conecta tu repositorio de GitHub en Vercel.
+2. En **Settings → Environment Variables**, agrega:
+
+   * `VITE_API_URL` (en Production) → URL de tu backend.
+   * `VITE_CLOUDINARY_CLOUD_NAME` y `VITE_CLOUDINARY_UPLOAD_PRESET`.
+3. Asegúrate de tener un `vercel.json` con:
+
+   ```json
+   {
+     "rewrites": [
+       { "source": "/(.*)", "destination": "/" }
+     ]
+   }
+   ```
+4. Empuja a la rama `main`; Vercel instalará, construirá (`pnpm build`) y desplegará tu front.
 
 ---
 
 ## 📖 Uso
 
-1. Levanta el backend.
-2. Levanta el frontend.
-3. Regístrate e inicia sesión.
-4. Administra recetas: crea, lista, elimina.
+Una vez desplegado:
+
+* Navega a `/auth/register`, `/auth/login`, etc., sin recibir 404.
+* La app consumirá la API en `VITE_API_URL`.
 
 ---
 
 ## 🔗 Enlaces
 
-* [Repositorio Frontend](https://github.com/galoss88/test-terrand-front)
-* [Repositorio Backend](https://github.com/galoss88/test-terrand-back)
+* **Repo Frontend**: [https://github.com/galoss88/test-terrand-front](https://github.com/galoss88/test-terrand-front)
