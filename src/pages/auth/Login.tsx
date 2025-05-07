@@ -4,6 +4,7 @@ import {
 } from "@/components/Material/MaterialButton";
 import { useForm } from "@/hooks";
 import { apiUrl } from "@/services/baseUrl";
+import { setLocalStorage } from "@/utils/setLocalStorage";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -55,8 +56,20 @@ const Login = () => {
         },
         body: JSON.stringify(values),
       });
-      const data = await response.json();
-      localStorage.setItem("userLogin", JSON.stringify(data));
+
+      const dataLogin = await response.json();
+      
+      setLocalStorage({
+        name: "userLogin",
+        value: dataLogin,
+      });
+
+      if (dataLogin.token) {
+        setLocalStorage({
+          name: "authToken",
+          value: dataLogin.token,
+        });
+      }
       navigate("/");
     } catch (error) {
       console.error("Error:", error);
