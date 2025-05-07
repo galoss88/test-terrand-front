@@ -20,7 +20,9 @@ const StyledButton = styled(Button, {
   backgroundColor: isLoading
     ? theme.palette.primary.main
     : theme.palette.primary.main,
-  color: isLoading ? theme.palette.action.disabled : "#e17055",
+  color: isLoading
+    ? theme.palette.primary.contrastText
+    : theme.palette.primary.contrastText,
   "&:hover": {
     backgroundColor: isLoading
       ? theme.palette.primary.main
