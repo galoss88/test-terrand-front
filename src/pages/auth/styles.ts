@@ -7,13 +7,12 @@ import {
   Typography,
 } from "@mui/material";
 
-export const StyledContainer = styled(Container)(({ theme }) => ({
+export const StyledContainer = styled(Container)(() => ({
   minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  padding: theme.spacing(3),
   backgroundAttachment: "fixed",
 }));
 
