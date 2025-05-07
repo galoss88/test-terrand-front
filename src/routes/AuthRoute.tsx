@@ -2,10 +2,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { Navigate, Outlet } from "react-router";
 
 const AuthRoute = () => {
-  const isLogged = useAuth(); 
+  const { isAuthenticated } = useAuth();
 
-  if (isLogged) {
-    return <Navigate to="/" />
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
   }
 
   return <Outlet />;

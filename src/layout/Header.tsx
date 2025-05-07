@@ -20,6 +20,12 @@ const menuButtons = [
     icon: <AddBoxIcon></AddBoxIcon>,
     to: "/myRecipes/create",
   },
+  {
+    title: "Cerrar Sesión",
+    icon: <AddBoxIcon></AddBoxIcon>,
+    to: "/myRecipes/create",
+    
+  },
 ];
 
 const Header = () => {
