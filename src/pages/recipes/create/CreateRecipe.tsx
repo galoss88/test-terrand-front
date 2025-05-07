@@ -15,7 +15,6 @@ import {
 import { imageUploadService } from "@/services/images/imageUploadService";
 import { recipeServiceParams } from "@/services/recipes/recipesService";
 import { fetchApi } from "@/utils/api";
-import { useAppTheme } from "@/utils/useTheme";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import { Box, Typography } from "@mui/material";
