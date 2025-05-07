@@ -1,5 +1,6 @@
 import { MaterialButton } from "@/components/Material/MaterialButton";
 import { MuiCard } from "@/components/Material/MuiCard";
+import { StyledText } from "@/pages/auth/styles";
 import { Grid } from "@mui/material";
 import { useCallback } from "react";
 import { useNavigate } from "react-router";
@@ -19,7 +20,9 @@ const RecipeItem = ({
       <MuiCard.Media image={recipe.image} alt={recipe.title} />
       <MuiCard.Title sx={{ textAlign: "center" }}>{recipe.title}</MuiCard.Title>
       <MuiCard.Content>
-        <MuiCard.Description>{recipe.description}</MuiCard.Description>
+        <MuiCard.Description>
+          <StyledText> {recipe.description}</StyledText>
+        </MuiCard.Description>
         <MuiCard.Description>
           {recipe.ingredients.map((ingredient) => {
             return <p key={ingredient}>- {ingredient}</p>;
