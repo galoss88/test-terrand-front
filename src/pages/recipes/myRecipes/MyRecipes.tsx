@@ -34,7 +34,6 @@ const MyRecipes = () => {
   }
   return (
     <StyledContainer maxWidth={false} sx={{ backgroundColor: "tranparent" }}>
-      Mis recetas
       <ListRecipes recipes={recipes} />
     </StyledContainer>
   );
