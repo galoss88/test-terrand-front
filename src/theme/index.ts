@@ -6,10 +6,10 @@ const rawTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      light: "#F4F1DE", // Tono crema suave para fondos
-      main: "#E07A5F", // Naranja-terracota cálido y apetitoso
+      light: "#fef7e1", // Tono crema suave para fondos
+      main: "#93C572",
       dark: "#C35A40", // Versión más oscura del naranja principal
-      contrastText: "#fff",
+      contrastText: "#000000",
     },
     secondary: {
       light: "#81B29A", // Verde salvia claro
@@ -70,13 +70,14 @@ const rawTheme = createTheme({
           fontWeight: 500,
           padding: "8px 16px",
           transition: "all 0.2s ease-in-out",
+
           "&:hover": {
             boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
             transform: "translateY(-2px)",
           },
         },
         containedPrimary: {
-          background: "linear-gradient(135deg, #E07A5F 0%, #C35A40 100%)",
+          background: "#a2d3c7",
         },
         containedSecondary: {
           background: "linear-gradient(135deg, #3D405B 0%, #2E3248 100%)",

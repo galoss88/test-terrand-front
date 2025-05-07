@@ -23,7 +23,7 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
   flexDirection: "column",
   alignItems: "center",
   borderRadius: 16,
-  backgroundColor: "rgba(35, 35, 50, 0.75)",
+  backgroundColor: theme.palette.primary.light,
   backdropFilter: "blur(12px)",
   boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
   border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -38,14 +38,14 @@ export const StyledTextField = styled(TextField)(({ theme }) => ({
   width: "100%",
   "& .MuiOutlinedInput-root": {
     borderRadius: 10,
-    backgroundColor: "rgba(255, 255, 255, 0.06)",
+    backgroundColor: theme.palette.primary.light,
     transition: "all 0.3s ease",
     "& fieldset": {
-      borderColor: "rgba(255, 255, 255, 0.3)",
+      borderColor: theme.palette.primary.contrastText,
       borderWidth: 1,
     },
     "&:hover fieldset": {
-      borderColor: "rgba(255, 255, 255, 0.5)",
+      borderColor: theme.palette.primary.contrastText,
     },
     "&.Mui-focused fieldset": {
       borderColor: theme.palette.primary.main,
@@ -56,7 +56,7 @@ export const StyledTextField = styled(TextField)(({ theme }) => ({
     },
   },
   "& .MuiInputLabel-root": {
-    color: "rgba(255, 255, 255, 0.7)",
+    color: theme.palette.primary.contrastText,
     "&.Mui-focused": {
       color: theme.palette.primary.main,
     },
@@ -65,7 +65,7 @@ export const StyledTextField = styled(TextField)(({ theme }) => ({
     },
   },
   "& .MuiInputBase-input": {
-    color: "rgba(255, 255, 255, 0.9)",
+    color: theme.palette.primary.contrastText,
     padding: "14px 16px",
     "&::placeholder": {
       color: "rgba(255, 255, 255, 0.5)",

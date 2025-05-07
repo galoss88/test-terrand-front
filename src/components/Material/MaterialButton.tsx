@@ -18,13 +18,13 @@ const StyledButton = styled(Button, {
   padding: theme.spacing(1.2),
   borderRadius: 50,
   backgroundColor: isLoading
-    ? theme.palette.action.disabledBackground
-    : "rgba(255, 247, 237, 0.9)",
+    ? theme.palette.primary.main
+    : theme.palette.primary.main,
   color: isLoading ? theme.palette.action.disabled : "#e17055",
   "&:hover": {
     backgroundColor: isLoading
-      ? theme.palette.action.disabledBackground
-      : "rgba(255, 247, 237, 1)",
+      ? theme.palette.primary.main
+      : theme.palette.primary.main,
   },
 }));
 
@@ -63,6 +63,7 @@ export const LoadingButton: React.FC<
 export const LinkButton: React.FC<MaterialButtonProps> = ({
   ...buttonProps
 }) => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(buttonProps.href ?? "/");
@@ -73,14 +74,15 @@ export const LinkButton: React.FC<MaterialButtonProps> = ({
       {...buttonProps}
       sx={{
         backgroundColor: "transparent",
-        color: "#ffffff82",
+        // color: theme.palette.primary.contrastText,
         outline: "none",
         textDecoration: "underline",
         textDecorationThickness: 2,
         textUnderlineOffset: 4,
+        color: theme.palette.primary.contrastText,
         "&:hover": {
-          background: "none",
-          color: "#FFF",
+          background: "transparent",
+          color: theme.palette.primary.contrastText,
         },
         textAlign: "center",
         ...buttonProps.sx,

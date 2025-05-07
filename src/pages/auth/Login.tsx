@@ -190,7 +190,9 @@ const Login = () => {
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
-                    <EmailIcon sx={{ color: "rgba(255, 255, 255, 0.7)" }} />
+                    <EmailIcon
+                      sx={{ color: theme.palette.primary.contrastText }}
+                    />
                   </InputAdornment>
                 ),
               },
@@ -216,7 +218,9 @@ const Login = () => {
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
-                    <LockIcon sx={{ color: "rgba(255, 255, 255, 0.7)" }} />
+                    <LockIcon
+                      sx={{ color: theme.palette.primary.contrastText }}
+                    />
                   </InputAdornment>
                 ),
                 endAdornment: (
@@ -225,7 +229,7 @@ const Login = () => {
                       aria-label="toggle password visibility"
                       onClick={handleTogglePasswordVisibility}
                       edge="end"
-                      sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                      sx={{ color: theme.palette.primary.contrastText }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
