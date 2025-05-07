@@ -8,7 +8,7 @@ import {
   LoadingButton,
   MaterialButton,
 } from "@/components/Material/MaterialButton";
-import { StyledContainer, StyledPaper, StyledText } from "@/pages/auth/styles";
+import { StyledPaper, StyledText } from "@/pages/auth/styles";
 
 // Hooks
 import { useFetch } from "@/hooks/useFetch";
@@ -178,7 +178,7 @@ export const EditRecipe = () => {
   const imageToShow = imgError ? placeholder : localPreview || placeholder;
 
   return (
-    <StyledContainer maxWidth={false} sx={{ height: "100%" }}>
+    <Box sx={{ height: "100%" }}>
       <StyledPaper elevation={3} sx={{ height: "100%", overflowY: "auto" }}>
         <StyledText variant="h5" color="rgba(255, 255, 255, 0.9)" mb={2}>
           Editar receta
@@ -249,7 +249,7 @@ export const EditRecipe = () => {
           />
         </form>
       </StyledPaper>
-    </StyledContainer>
+    </Box>
   );
 };
 
