@@ -1,26 +1,35 @@
+import { MaterialButton } from "@/components/Material/MaterialButton";
 import { MuiCard } from "@/components/Material/MuiCard";
+import { useFetch } from "@/hooks/useFetch";
 import { StyledContainer, StyledText } from "@/pages/auth/styles";
+import { recipeServiceParams } from "@/services/recipes/recipesService";
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { IRecipe } from "../myRecipes/types";
 
 const DetailRecipe = () => {
   const { id } = useParams<{ id: string }>();
-  const [dataDetail, setDataDetail] = useState<IRecipe>();
-
-  useEffect(() => {
-    const url = "http://localhost:3000/recipes";
-    fetch(`${url}/?id=${id}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        const cleanData = Array.isArray(data) ? data[0] : data;
-        setDataDetail(cleanData);
-      });
-  }, [id]);
+  const {
+    data: dataDetail,
+    loading,
+    error,
+    refetch,
+  } = useFetch<IRecipe>(recipeServiceParams.detail(id!));
 
   if (!dataDetail) return <>No hay datos para esta receta.</>;
-
+  if (loading) {
+    return <StyledText>Cargando detalle de receta</StyledText>;
+  }
+  if (error) {
+    return (
+      <Box>
+        Ocurrio un error al trae detalle de la receta
+        <MaterialButton onClick={() => refetch()}>
+          Recargar datos
+        </MaterialButton>
+      </Box>
+    );
+  }
   return (
     <StyledContainer
       maxWidth={false}

@@ -20,6 +20,15 @@ export const recipeServiceParams = {
     };
     return paramsCreate;
   },
+  detail(id: string): FetchParams {
+    
+    const url = `${apiUrl}/private/recipes/${id}`;
+    const paramsCreate = {
+      url: url,
+      method: "get",
+    };
+    return paramsCreate;
+  },
 };
 export const recipeService: IRecipeService = {
   getById(id) {
