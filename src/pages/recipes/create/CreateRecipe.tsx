@@ -1,19 +1,17 @@
-import {
-  DeleteButton,
-  LoadingButton,
-  MaterialButton,
-} from "@/components/Material/MaterialButton";
+import { LoadingButton } from "@/components/Material/MaterialButton";
+
 import { useForm } from "@/hooks";
 import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
 import { useNavigation } from "@/hooks/useNavigation";
-import { StyledPaper, StyledText, StyledTextField } from "@/pages/auth/styles";
+import { StyledPaper, StyledText } from "@/pages/auth/styles";
 import { imageUploadService } from "@/services/images/imageUploadService";
 import { recipeServiceParams } from "@/services/recipes/recipesService";
 import { fetchApi } from "@/utils/api";
-import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from "@mui/icons-material/Clear";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useState } from "react";
+import ImageUploadSection from "../components/ImageUploadSection";
+import RecipeFieldsSection from "../components/RecipeFieldsSection";
+import RecipeListSection from "../components/RecipeListSection";
 
 const initialValues = {
   title: "",
@@ -26,13 +24,56 @@ const initialValues = {
 type InitialValues = typeof initialValues;
 
 const CreateRecipe = () => {
-  // const theme = useAppTheme();
   const fetchWithAuth = useFetchWithAuth(fetchApi);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [error, setError] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
+  const [localPreview, setLocalPreview] = useState("");
+  const [imgError, setImgError] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
   const { goTo } = useNavigation();
   const formRecipe = useForm({ initialValues });
+
+  const handleImageUrlChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    formRecipe.handleChange(e);
+    setLocalPreview("");
+    setFile(null);
+  };
+
+  const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+
+      // Crear una vista previa local
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setLocalPreview(reader.result);
+        }
+      };
+      reader.readAsDataURL(selectedFile);
+      formRecipe.setPropertyValue("image", "");
+      setImgError(false);
+    }
+  };
+
+  const clearSelection = () => {
+    setFile(null);
+    setLocalPreview("");
+  };
+
+  const cleanup = () => {
+    clearSelection();
+    setImgError(false);
+  };
+
+  const imageToShow =
+    localPreview ||
+    formRecipe.values.image ||
+    "https://via.placeholder.com/400x200?text=No+Image";
 
   const onSubmitRecipe = async (values: InitialValues) => {
     setLoadingSubmit(true);
@@ -41,11 +82,13 @@ const CreateRecipe = () => {
     try {
       let imageUrl = values.image;
       if (file) {
+        setLoadingImage(true);
         const uploadResult = await imageUploadService.uploadImage(file);
         if (!uploadResult.success) {
           throw new Error(uploadResult.error || "Error al subir la imagen");
         }
         imageUrl = uploadResult.url;
+        setLoadingImage(false);
       }
 
       const body = {
@@ -57,158 +100,117 @@ const CreateRecipe = () => {
         body,
       });
       formRecipe.resetForm();
+      cleanup();
       goTo("/myRecipes");
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Falló la creación de la receta.");
     } finally {
       setLoadingSubmit(false);
+      setLoadingImage(false);
     }
+  };
+
+  const imageSelectionProps = {
+    selectedFile: file,
+    localPreview,
+    imgError,
+    loadingImage,
+    setLoadingImage,
+    handleFileSelection,
+    clearSelection,
+    setImgError,
+    setLocalPreview,
+    cleanup,
   };
 
   return (
     <Box sx={{ height: "100%" }}>
-      <StyledPaper elevation={3} sx={{ height: "100%", mt: 0 }}>
-        <Typography
-          component="h1"
-          variant="h5"
-          color="rgba(255, 255, 255, 0.9)"
-          mb={2}
-        >
+      <StyledPaper elevation={3} sx={{ p: 3, height: "100%", mt: 0 }}>
+        <StyledText variant="h5" mb={2} textAlign="center">
           Crear receta
-        </Typography>
+        </StyledText>
 
-        {error && <StyledText color="error">{error}</StyledText>}
+        {error && (
+          <StyledText color="error" sx={{ mb: 2 }}>
+            {error}
+          </StyledText>
+        )}
 
         <form
           style={{
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
+            gap: "16px",
           }}
           onSubmit={formRecipe.handleSubmit(onSubmitRecipe)}
         >
-          <Box
-            sx={{
-              display: "flex",
-              gap: { xs: 5 },
-              justifyContent: "flex-start",
-              width: "100%",
-            }}
-          >
-            {/* Input de fichero */}
-            <Box sx={{ flex: 0.5 }}>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files?.[0]) {
-                    setFile(e.target.files[0]);
-                  }
-                }}
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 4, md: 6 }}>
+              <ImageUploadSection
+                form={formRecipe}
+                handleImageUrlChange={handleImageUrlChange}
+                imageSelectionProps={imageSelectionProps}
+                imageToShow={imageToShow}
               />
-            </Box>
+            </Grid>
 
-            {/* Título y descripción */}
-            <Box sx={{ display: "flex", flex: 1, flexDirection: "column" }}>
-              <StyledTextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="title"
-                label="Título"
-                name="title"
-                autoComplete="title"
-                autoFocus
+            <Grid size={{ xs: 12, sm: 8, md: 5 }}>
+              <RecipeFieldsSection form={formRecipe} />
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <RecipeListSection
+                title="Ingredientes"
+                name="ingredients"
+                items={formRecipe.values.ingredients}
+                errors={formRecipe.errors.ingredients}
                 onChange={formRecipe.handleChange}
-                value={formRecipe.values.title}
-                error={!!formRecipe.errors.title}
-                helperText={formRecipe.errors.title}
+                onAdd={() => formRecipe.addItem("ingredients")}
+                onDelete={(index) =>
+                  formRecipe.deleteData("ingredients", index)
+                }
+                buttonText="Añadir ingrediente"
+                fieldLabel="Ingrediente"
               />
-              <StyledTextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="description"
-                label="Descripción"
-                name="description"
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6 }}>
+              <RecipeListSection
+                title="Instrucciones"
+                name="instructions"
+                items={formRecipe.values.instructions}
+                errors={formRecipe.errors.instructions}
                 onChange={formRecipe.handleChange}
-                value={formRecipe.values.description}
-                error={!!formRecipe.errors.description}
-                helperText={formRecipe.errors.description}
+                onAdd={() => formRecipe.addItem("instructions")}
+                onDelete={(index) =>
+                  formRecipe.deleteData("instructions", index)
+                }
+                buttonText="Añadir instrucción"
+                fieldLabel="Paso"
+                multiline={true}
+                rows={2}
               />
-            </Box>
+            </Grid>
+          </Grid>
+
+          <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              isLoading={loadingSubmit || loadingImage}
+              disabled={loadingSubmit || loadingImage}
+              textWhenNotLoading="Crear receta"
+              loadingText="Creando receta..."
+              sx={{
+                width: { xs: "100%", sm: "75%", md: "50%" },
+                py: 1.5,
+              }}
+            />
           </Box>
-
-          {/* Ingredientes e instrucciones (igual que antes) */}
-          <Box sx={{ display: "flex", flex: 1, width: "100%", gap: 2 }}>
-            <Box sx={{ flex: 0.5, flexDirection: "column" }}>
-              {formRecipe.values.ingredients.map((ing, i) => (
-                <Box key={i} sx={{ display: "flex" }}>
-                  <StyledTextField
-                    name="ingredients"
-                    label="Ingrediente"
-                    onChange={(e) => formRecipe.handleChange(e, i)}
-                    value={ing}
-                    error={!!formRecipe.errors.ingredients}
-                    helperText={formRecipe.errors.ingredients}
-                    fullWidth
-                  />
-                  <DeleteButton
-                    onClick={() => formRecipe.deleteData("ingredients", i)}
-                    sx={styles.buttonDelete}
-                  >
-                    <ClearIcon></ClearIcon>
-                  </DeleteButton>
-                </Box>
-              ))}
-              <MaterialButton onClick={() => formRecipe.addItem("ingredients")}>
-                <AddIcon />
-              </MaterialButton>
-            </Box>
-
-            <Box sx={{ flex: 0.5, flexDirection: "column" }}>
-              {formRecipe.values.instructions.map((ins, i) => (
-                <Box key={i} sx={{ display: "flex" }}>
-                  <StyledTextField
-                    name="instructions"
-                    label="Instrucción"
-                    onChange={(e) => formRecipe.handleChange(e, i)}
-                    value={ins}
-                    error={!!formRecipe.errors.instructions}
-                    helperText={formRecipe.errors.instructions}
-                    fullWidth
-                  />
-                  <DeleteButton
-                    onClick={() => formRecipe.deleteData("instructions", i)}
-                    sx={styles.buttonDelete}
-                  >
-                    <ClearIcon />
-                  </DeleteButton>
-                </Box>
-              ))}
-              <MaterialButton
-                onClick={() => formRecipe.addItem("instructions")}
-              >
-                <AddIcon />
-              </MaterialButton>
-            </Box>
-          </Box>
-
-          <LoadingButton
-            type="submit"
-            fullWidth
-            variant="contained"
-            isLoading={loadingSubmit}
-            disabled={loadingSubmit}
-            textWhenNotLoading="Crear receta"
-            loadingText="Creando receta..."
-          />
         </form>
       </StyledPaper>
     </Box>
@@ -216,9 +218,3 @@ const CreateRecipe = () => {
 };
 
 export default CreateRecipe;
-
-const styles = {
-  buttonDelete: {
-    "&:hover": { color: "red" },
-  },
-};

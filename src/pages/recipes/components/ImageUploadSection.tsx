@@ -1,5 +1,6 @@
-import { StyledTextField } from "@/pages/auth/styles";
-import { Box, Typography } from "@mui/material";
+import { ImageUploadWithPreview } from "@/components/Material/MuiUploadButton";
+import { StyledText, StyledTextField } from "@/pages/auth/styles";
+import { Box } from "@mui/material";
 
 interface ImageSelectionProps {
   selectedFile: File | null;
@@ -43,10 +44,8 @@ const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
   imageSelectionProps,
   imageToShow,
 }) => {
-  const { selectedFile, setImgError } = imageSelectionProps;
-
   return (
-    <Box sx={{ flex: 0.5, display: "flex", flexDirection: "column" }}>
+    <Box sx={{ flex: 0.5, display: "flex", flexDirection: "column", gap: 2 }}>
       <StyledTextField
         variant="outlined"
         margin="normal"
@@ -60,39 +59,21 @@ const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
         helperText={form.errors.image}
       />
 
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={imageSelectionProps.handleFileSelection}
-          style={{ marginTop: 8 }}
-          id="image-upload"
-        />
-        {selectedFile && (
-          <Typography variant="caption" sx={{ color: "success.main" }}>
-            Archivo seleccionado: {selectedFile.name}
-          </Typography>
-        )}
-      </Box>
-
-      <Box
-        component="img"
-        src={imageToShow}
-        alt="Preview"
-        onError={() => setImgError(true)}
-        sx={{
-          width: "100%",
-          maxHeight: 200,
-          objectFit: "cover",
-          mt: 1,
-          borderRadius: 2,
+      {/* Usar el componente ImageUploadWithPreview para manejar la subida y vista previa */}
+      <ImageUploadWithPreview
+        imageSelectionProps={{
+          selectedFile: imageSelectionProps.selectedFile,
+          handleFileSelection: imageSelectionProps.handleFileSelection,
+          clearSelection: imageSelectionProps.clearSelection,
+          setImgError: imageSelectionProps.setImgError
         }}
+        imageToShow={imageToShow}
       />
-
-      {selectedFile && (
-        <Typography variant="caption" sx={{ mt: 1, color: "info.main" }}>
-          La imagen se subirá cuando guardes los cambios
-        </Typography>
+      
+      {form.errors.image && (
+        <StyledText color="error">
+          {form.errors.image}
+        </StyledText>
       )}
     </Box>
   );

@@ -2,8 +2,8 @@ import {
   DeleteButton,
   MaterialButton,
 } from "@/components/Material/MaterialButton";
-import { StyledTextField } from "@/pages/auth/styles";
-import { Box, Typography } from "@mui/material";
+import { StyledText, StyledTextField } from "@/pages/auth/styles";
+import { Box } from "@mui/material";
 
 interface RecipeListSectionProps {
   title: string;
@@ -44,9 +44,7 @@ const RecipeListSection: React.FC<RecipeListSectionProps> = ({
         gap: 1,
       }}
     >
-      <Typography variant="subtitle1" color="rgba(255, 255, 255, 0.9)">
-        {title}
-      </Typography>
+      <StyledText variant="subtitle1">{title}</StyledText>
 
       {items.map((item, idx) => (
         <Box key={idx} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
