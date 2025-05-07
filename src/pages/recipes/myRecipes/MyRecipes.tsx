@@ -1,23 +1,18 @@
 import { MaterialButton } from "@/components/Material/MaterialButton";
 import { useFetch } from "@/hooks/useFetch";
 import { StyledContainer } from "@/pages/auth/styles";
-import { apiUrl } from "@/services/baseUrl";
+import { recipeServiceParams } from "@/services/recipes/recipesService";
 import { Box } from "@mui/material";
 import { ListRecipes } from "./components";
 import { IRecipe } from "./types";
 
-const url = `${apiUrl}/private/recipes`;
-const params = {
-  url,
-  method: "GET",
-};
 const MyRecipes = () => {
   const {
     data: recipes,
     loading,
     error,
     refetch,
-  } = useFetch<IRecipe[]>(params);
+  } = useFetch<IRecipe[]>(recipeServiceParams.getAllById());
 
   if (loading) {
     return <Box>Cargando recetas...</Box>;

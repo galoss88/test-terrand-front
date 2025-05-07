@@ -10,7 +10,7 @@ import {
   StyledPaper,
   StyledTextField,
 } from "@/pages/auth/styles";
-import { recipeService } from "@/services/recipes/recipesService";
+import { recipeServiceParams } from "@/services/recipes/recipesService";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -109,7 +109,7 @@ export const EditRecipe = () => {
 
   useEffect(() => {
     if (!recipeId) return;
-    recipeService
+    recipeServiceParams
       .getById(recipeId)
       .then((recipe: IRecipe) => {
         form.setValues({
@@ -137,7 +137,7 @@ export const EditRecipe = () => {
 
       if (selectedFile) {
         setLoadingImage(true);
-        imageUrl = await recipeService.uploadImage(selectedFile);
+        imageUrl = await recipeServiceParams.uploadImage(selectedFile);
         setLoadingImage(false);
       }
 
@@ -150,7 +150,7 @@ export const EditRecipe = () => {
       };
 
       if (!recipeId) return;
-      await recipeService.update(recipeId, payload);
+      await recipeServiceParams.update(recipeId, payload);
 
       if (originalImage && originalImage !== imageUrl) {
         // await recipeService.deleteUnusedImage(originalImage);

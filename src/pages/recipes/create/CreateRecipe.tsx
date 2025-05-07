@@ -9,7 +9,7 @@ import {
   StyledPaper,
   StyledTextField,
 } from "@/pages/auth/styles";
-import { recipeService } from "@/services/recipes/recipesService";
+import { recipeServiceParams } from "@/services/recipes/recipesService";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 const initialValues = {
@@ -25,7 +25,7 @@ const CreateRecipe = () => {
 
   const onSubmitRecipe = () => {
     const body = formRecipe.values;
-    recipeService.create({ body });
+    recipeServiceParams.create({ body });
     // const url = "http://localhost:3000/recipes";
     // const idUser = 1;
     // const response = fetch(`${url}?id=${idUser}`, {
