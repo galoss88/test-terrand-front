@@ -15,6 +15,9 @@ import {
 import { imageUploadService } from "@/services/images/imageUploadService";
 import { recipeServiceParams } from "@/services/recipes/recipesService";
 import { fetchApi } from "@/utils/api";
+import { useAppTheme } from "@/utils/useTheme";
+import AddIcon from "@mui/icons-material/Add";
+import ClearIcon from "@mui/icons-material/Clear";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 
@@ -29,6 +32,7 @@ const initialValues = {
 type InitialValues = typeof initialValues;
 
 const CreateRecipe = () => {
+  // const theme = useAppTheme();
   const fetchWithAuth = useFetchWithAuth(fetchApi);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [error, setError] = useState<string>();
@@ -165,12 +169,12 @@ const CreateRecipe = () => {
                     onClick={() => formRecipe.deleteData("ingredients", i)}
                     sx={styles.buttonDelete}
                   >
-                    X
+                    <ClearIcon></ClearIcon>
                   </DeleteButton>
                 </Box>
               ))}
               <MaterialButton onClick={() => formRecipe.addItem("ingredients")}>
-                +
+                <AddIcon />
               </MaterialButton>
             </Box>
 
@@ -190,14 +194,14 @@ const CreateRecipe = () => {
                     onClick={() => formRecipe.deleteData("instructions", i)}
                     sx={styles.buttonDelete}
                   >
-                    X
+                    <ClearIcon />
                   </DeleteButton>
                 </Box>
               ))}
               <MaterialButton
                 onClick={() => formRecipe.addItem("instructions")}
               >
-                +
+                <AddIcon />
               </MaterialButton>
             </Box>
           </Box>
@@ -221,8 +225,6 @@ export default CreateRecipe;
 
 const styles = {
   buttonDelete: {
-    color: "red",
-    backgroundColor: "transparent",
-    "&:hover": { color: "blue" },
+    "&:hover": { color: "red" },
   },
 };
