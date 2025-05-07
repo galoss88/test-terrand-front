@@ -4,6 +4,7 @@ import {
   MaterialButton,
 } from "@/components/Material/MaterialButton";
 import { useForm } from "@/hooks";
+import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
 import {
   StyledContainer,
   StyledPaper,
@@ -11,7 +12,8 @@ import {
   StyledTextField,
 } from "@/pages/auth/styles";
 import { imageUploadService } from "@/services/images/imageUploadService";
-import { recipeService } from "@/services/recipes/recipesService";
+import { recipeServiceParams } from "@/services/recipes/recipesService";
+import { fetchApi } from "@/utils/api";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 
@@ -26,6 +28,7 @@ const initialValues = {
 type InitialValues = typeof initialValues;
 
 const CreateRecipe = () => {
+  const fetchWithAuth = useFetchWithAuth(fetchApi);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [error, setError] = useState<string>();
   // nuevo estado para almacenar el File que selecciona el usuario
@@ -51,11 +54,10 @@ const CreateRecipe = () => {
         ...values,
         image: imageUrl,
       };
-
-      // 3. Llamamos al servicio de creación
-      await recipeService.create({ body });
-
-      // aquí podrías redirigir, limpiar formulario, etc.
+      await fetchWithAuth({
+        ...recipeServiceParams.create(),
+        body,
+      });
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Falló la creación de la receta.");

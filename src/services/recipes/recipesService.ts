@@ -2,6 +2,7 @@ import { IRecipe } from "@/pages/recipes/myRecipes/types";
 import { fetchApi, FetchParams } from "@/utils/api";
 import { apiUrl } from "../baseUrl";
 import { imageUploadService } from "../images/imageUploadService";
+import { IRecipeService } from "./types";
 export const recipeServiceParams = {
   getAllById(): FetchParams {
     const url = `${apiUrl}/private/recipes`;
@@ -11,47 +12,43 @@ export const recipeServiceParams = {
     };
     return params;
   },
-  create(): FetchParams {
+  create(token?: string): FetchParams {
     const paramsCreate = {
-      url: `http://localhost:3000/private/recipes/create`,
+      url: `${apiUrl}/private/recipes`,
       method: "POST",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
     return paramsCreate;
   },
 };
-export const recipeService = {
-  getById(id: number | string): Promise<IRecipe> {
-    const idRecipeToGet = id;
+export const recipeService: IRecipeService = {
+  getById(id) {
     return fetchApi<IRecipe>({
-      url: `http://localhost:3000/recipes/${idRecipeToGet}`,
+      url: `${apiUrl}/recipes/${id}`,
       method: "GET",
     });
   },
 
-  update(id: number | string, body: Omit<IRecipe, "id">): Promise<IRecipe> {
-    const idRecipeToUpdate = id;
-
+  update(id, body) {
     return fetchApi<IRecipe>({
-      url: `http://localhost:3000/recipes/${idRecipeToUpdate}`,
+      url: `${apiUrl}/recipes/${id}`,
       method: "PUT",
       body,
     });
   },
 
-  async create({ body }: { body: Omit<IRecipe, "id"> }): Promise<IRecipe> {
-    return await fetchApi<IRecipe>({
-      ...recipeServiceParams.create(),
-      body: body,
+  async create({ body, token }) {
+    return fetchApi<IRecipe>({
+      ...recipeServiceParams.create(token),
+      body,
     });
   },
 
-  async uploadImage(file: File | FormData): Promise<string> {
+  async uploadImage(file) {
     const result = await imageUploadService.uploadImage(file);
-
     if (!result.success) {
       throw new Error(result.error || "Error al subir la imagen");
     }
-
     return result.url;
   },
 };
