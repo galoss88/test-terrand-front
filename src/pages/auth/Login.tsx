@@ -142,7 +142,7 @@ const Login = () => {
             mt={1}
           >
             <LinkButton href={"/auth/register"}>Registrarse</LinkButton>
-            <LinkButton href={"#"}> ¿Olvidaste tu contraseña?</LinkButton>
+            {/* <LinkButton href={"#"}> ¿Olvidaste tu contraseña?</LinkButton> */}
           </Box>
         </form>
       </StyledPaper>
