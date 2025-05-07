@@ -1,22 +1,35 @@
+import { Box, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+// Componentes
 import {
-  DeleteButton,
   LoadingButton,
   MaterialButton,
 } from "@/components/Material/MaterialButton";
+import { StyledContainer, StyledPaper } from "@/pages/auth/styles";
+
+// Hooks
+import { useFetch } from "@/hooks/useFetch";
 import { useForm } from "@/hooks/useForm";
 import { useImageSelection } from "@/hooks/useImageSelection";
+
+// Services
 import {
-  StyledContainer,
-  StyledPaper,
-  StyledTextField,
-} from "@/pages/auth/styles";
-import { recipeService } from "@/services/recipes/recipesService";
-import { Box, CircularProgress, Typography } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+  recipeService,
+  recipeServiceParams,
+} from "@/services/recipes/recipesService";
+
+// Types
+import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
+import { fetchApi } from "@/utils/api";
+import ImageUploadSection from "../components/ImageUploadSection";
+import RecipeFieldsSection from "../components/RecipeFieldsSection";
+import RecipeListSection from "../components/RecipeListSection";
 import { IRecipe } from "../myRecipes/types";
 
-interface RecipeFormValues {
+// Valores predeterminados y tipos
+export interface RecipeFormValues {
   title: string;
   image: string;
   description: string;
@@ -36,99 +49,80 @@ export const EditRecipe = () => {
   const { id } = useParams<{ id: string }>();
   const recipeId = id;
   const navigate = useNavigate();
+  const fetchWithAuth = useFetchWithAuth(fetchApi);
 
-  const [loadingData, setLoadingData] = useState(true);
+  // Estado
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [originalImage, setOriginalImage] = useState<string>("");
+
+  // Custom hooks
+  const {
+    data: dataDetail,
+    loading,
+    error,
+    refetch,
+  } = useFetch<IRecipe>(recipeServiceParams.detail(recipeId!));
 
   const form = useForm<RecipeFormValues>({
     initialValues: defaultValues,
-    validate: (values) => {
-      const errors: Partial<Record<keyof RecipeFormValues, string>> = {};
-      if (!values.title) errors.title = "El título es obligatorio";
-      if (!values.description)
-        errors.description = "La descripción es obligatoria";
-
-      // No validamos la imagen si hay un archivo seleccionado
-      if (
-        values.image &&
-        !values.image.startsWith("data:image/") &&
-        !values.image.startsWith("http") &&
-        !selectedFile
-      ) {
-        try {
-          new URL(values.image);
-        } catch {
-          errors.image = "La URL de imagen no es válida";
-        }
-      }
-
-      if (values.ingredients.some((i) => !i))
-        errors.ingredients = "Todos los ingredientes deben tener texto";
-      if (values.instructions.some((i) => !i))
-        errors.instructions = "Todas las instrucciones deben tener texto";
-      return errors;
-    },
+    validate: validateRecipeForm,
   });
 
+  const imageSelectionProps = useImageSelection();
   const {
     selectedFile,
     localPreview,
     imgError,
     loadingImage,
     setLoadingImage,
-    handleFileSelection,
     clearSelection,
-    setImgError,
+    // setImgError,
     setLocalPreview,
     cleanup,
-  } = useImageSelection();
+  } = imageSelectionProps;
 
+  // Efectos
   useEffect(() => {
     return () => {
       cleanup();
     };
-  }, []);
-
-  const handleImageUrlChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const url = e.target.value;
-      form.handleChange(e);
-
-      if (url) {
-        if (selectedFile) {
-          clearSelection();
-        }
-        setLocalPreview(url);
-      } else {
-        setLocalPreview("");
-      }
-    },
-    [form, selectedFile, clearSelection, setLocalPreview]
-  );
+  }, [cleanup]);
 
   useEffect(() => {
-    if (!recipeId) return;
-    recipeService
-      .getById(recipeId)
-      .then((recipe: IRecipe) => {
-        form.setValues({
-          title: recipe.title,
-          image: recipe?.image ?? "",
-          description: recipe.description,
-          instructions: recipe.instructions.length ? recipe.instructions : [""],
-          ingredients: recipe.ingredients.length ? recipe.ingredients : [""],
-        });
-        if (recipe.image) {
-          setLocalPreview(recipe.image);
-          setOriginalImage(recipe.image);
-        }
-      })
-      .catch(() => {
-        console.error("Error al cargar receta:");
-      })
-      .finally(() => setLoadingData(false));
-  }, [recipeId]);
+    if (!recipeId || !dataDetail) return;
+
+    form.setValues({
+      title: dataDetail.title,
+      image: dataDetail?.image ?? "",
+      description: dataDetail.description,
+      instructions: dataDetail.instructions.length
+        ? dataDetail.instructions
+        : [""],
+      ingredients: dataDetail.ingredients.length
+        ? dataDetail.ingredients
+        : [""],
+    });
+
+    if (dataDetail.image) {
+      setLocalPreview(dataDetail.image);
+    }
+  }, [recipeId, dataDetail, form.setValues, setLocalPreview]);
+
+  // Manejadores de eventos
+  const handleImageUrlChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const url = e.target.value;
+    form.handleChange(e);
+
+    if (url) {
+      if (selectedFile) {
+        clearSelection();
+      }
+      setLocalPreview(url);
+    } else {
+      setLocalPreview("");
+    }
+  };
 
   const onSubmit = async (values: RecipeFormValues) => {
     setLoadingSubmit(true);
@@ -141,23 +135,20 @@ export const EditRecipe = () => {
         setLoadingImage(false);
       }
 
-      const payload: Omit<IRecipe, "id"> = {
+      const payload: IRecipe = {
         title: values.title,
         description: values.description,
         instructions: values.instructions.filter((i) => i.trim() !== ""),
         ingredients: values.ingredients.filter((i) => i.trim() !== ""),
         image: imageUrl,
+        id: recipeId!,
       };
 
       if (!recipeId) return;
-      await recipeService.update(recipeId, payload);
 
-      if (originalImage && originalImage !== imageUrl) {
-        // await recipeService.deleteUnusedImage(originalImage);
-      }
+      fetchWithAuth({ ...recipeServiceParams.update(), body: payload });
 
       clearSelection();
-
       navigate("/myRecipes");
     } catch (err) {
       console.error("Error al actualizar receta:", err);
@@ -166,24 +157,23 @@ export const EditRecipe = () => {
     }
   };
 
-  if (loadingData) {
+  if (loading) {
+    return <Box>Cargando receta...</Box>;
+  }
+
+  if (error) {
     return (
-      <Box
-        sx={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <CircularProgress />
+      <Box>
+        Ocurrió un error al traer la receta a editar
+        <MaterialButton onClick={() => refetch()}>
+          Recargar datos
+        </MaterialButton>
       </Box>
     );
   }
 
   const placeholder =
     "https://via.placeholder.com/150?text=Sin+previsualizaci%C3%B3n";
-
   const imageToShow = imgError ? placeholder : localPreview || placeholder;
 
   return (
@@ -207,173 +197,47 @@ export const EditRecipe = () => {
           }}
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          {/* Imagen: URL o archivo + preview */}
           <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
-            <Box sx={{ flex: 0.5, display: "flex", flexDirection: "column" }}>
-              <StyledTextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="image"
-                type="text"
-                label="URL de imagen"
-                onChange={handleImageUrlChange}
-                value={form.values.image}
-                error={!!form.errors.image}
-                helperText={form.errors.image}
-              />
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelection}
-                  style={{ marginTop: 8 }}
-                  id="image-upload"
-                />
-                {selectedFile && (
-                  <Typography variant="caption" sx={{ color: "success.main" }}>
-                    Archivo seleccionado: {selectedFile.name}
-                  </Typography>
-                )}
-              </Box>
+            {/* Sección de imagen */}
+            <ImageUploadSection
+              form={form}
+              handleImageUrlChange={handleImageUrlChange}
+              imageSelectionProps={imageSelectionProps}
+              imageToShow={imageToShow}
+            />
 
-              <Box
-                component="img"
-                src={imageToShow}
-                alt="Preview"
-                onError={() => setImgError(true)}
-                sx={{
-                  width: "100%",
-                  maxHeight: 200,
-                  objectFit: "cover",
-                  mt: 1,
-                  borderRadius: 2,
-                }}
-              />
-
-              {selectedFile && (
-                <Typography
-                  variant="caption"
-                  sx={{ mt: 1, color: "info.main" }}
-                >
-                  La imagen se subirá cuando guardes los cambios
-                </Typography>
-              )}
-            </Box>
-
-            {/* Título y descripción */}
-            <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-              <StyledTextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                id="title"
-                label="Título"
-                name="title"
-                onChange={form.handleChange}
-                value={form.values.title}
-                error={!!form.errors.title}
-                helperText={form.errors.title}
-              />
-              <StyledTextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                id="description"
-                label="Descripción"
-                name="description"
-                onChange={form.handleChange}
-                value={form.values.description}
-                error={!!form.errors.description}
-                helperText={form.errors.description}
-                multiline
-                rows={4}
-              />
-            </Box>
+            {/* Sección de campos básicos */}
+            <RecipeFieldsSection form={form} />
           </Box>
 
-          {/* Ingredientes e instrucciones */}
           <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
-            <Box
-              sx={{
-                flex: 0.5,
-                display: "flex",
-                flexDirection: "column",
-                gap: 1,
-              }}
-            >
-              <Typography variant="subtitle1" color="rgba(255, 255, 255, 0.9)">
-                Ingredientes
-              </Typography>
-              {form.values.ingredients.map((ing, idx) => (
-                <Box
-                  key={idx}
-                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                >
-                  <StyledTextField
-                    fullWidth
-                    name="ingredients"
-                    label={`Ingrediente ${idx + 1}`}
-                    onChange={(e) => form.handleChange(e, idx)}
-                    value={ing}
-                    error={!!form.errors.ingredients}
-                    helperText={idx === 0 ? form.errors.ingredients : ""}
-                  />
-                  {form.values.ingredients.length > 1 && (
-                    <DeleteButton
-                      onClick={() => form.deleteData("ingredients", idx)}
-                    >
-                      X
-                    </DeleteButton>
-                  )}
-                </Box>
-              ))}
-              <MaterialButton onClick={() => form.addItem("ingredients")}>
-                + Ingrediente
-              </MaterialButton>
-            </Box>
+            {/* Ingredientes */}
+            <RecipeListSection
+              title="Ingredientes"
+              name="ingredients"
+              items={form.values.ingredients}
+              errors={form.errors.ingredients}
+              onChange={form.handleChange}
+              onAdd={() => form.addItem("ingredients")}
+              onDelete={(idx) => form.deleteData("ingredients", idx)}
+              buttonText="+ Ingrediente"
+              fieldLabel="Ingrediente"
+            />
 
-            <Box
-              sx={{
-                flex: 0.5,
-                display: "flex",
-                flexDirection: "column",
-                gap: 1,
-              }}
-            >
-              <Typography variant="subtitle1" color="rgba(255, 255, 255, 0.9)">
-                Instrucciones
-              </Typography>
-              {form.values.instructions.map((inst, idx) => (
-                <Box
-                  key={idx}
-                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                >
-                  <StyledTextField
-                    fullWidth
-                    name="instructions"
-                    label={`Paso ${idx + 1}`}
-                    onChange={(e) => form.handleChange(e, idx)}
-                    value={inst}
-                    error={!!form.errors.instructions}
-                    helperText={idx === 0 ? form.errors.instructions : ""}
-                    multiline
-                    rows={2}
-                    type="text"
-                  />
-                  {form.values.instructions.length > 1 && (
-                    <DeleteButton
-                      onClick={() => form.deleteData("instructions", idx)}
-                    >
-                      X
-                    </DeleteButton>
-                  )}
-                </Box>
-              ))}
-              <MaterialButton onClick={() => form.addItem("instructions")}>
-                + Instrucción
-              </MaterialButton>
-            </Box>
+            {/* Instrucciones */}
+            <RecipeListSection
+              title="Instrucciones"
+              name="instructions"
+              items={form.values.instructions}
+              errors={form.errors.instructions}
+              onChange={form.handleChange}
+              onAdd={() => form.addItem("instructions")}
+              onDelete={(idx) => form.deleteData("instructions", idx)}
+              buttonText="+ Instrucción"
+              fieldLabel="Paso"
+              multiline
+              rows={2}
+            />
           </Box>
 
           {/* Botón de envío */}
@@ -391,5 +255,20 @@ export const EditRecipe = () => {
     </StyledContainer>
   );
 };
+
+function validateRecipeForm(values: RecipeFormValues) {
+  const errors: Partial<Record<keyof RecipeFormValues, string>> = {};
+
+  if (!values.title) errors.title = "El título es obligatorio";
+  if (!values.description) errors.description = "La descripción es obligatoria";
+
+  if (values.ingredients.some((i) => !i))
+    errors.ingredients = "Todos los ingredientes deben tener texto";
+
+  if (values.instructions.some((i) => !i))
+    errors.instructions = "Todas las instrucciones deben tener texto";
+
+  return errors;
+}
 
 export default EditRecipe;

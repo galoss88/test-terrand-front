@@ -21,11 +21,17 @@ export const recipeServiceParams = {
     return paramsCreate;
   },
   detail(id: string): FetchParams {
-    
     const url = `${apiUrl}/private/recipes/${id}`;
     const paramsCreate = {
       url: url,
       method: "get",
+    };
+    return paramsCreate;
+  },
+  update(): FetchParams {
+    const paramsCreate = {
+      url: `${apiUrl}/private/recipes`,
+      method: "PUT",
     };
     return paramsCreate;
   },
