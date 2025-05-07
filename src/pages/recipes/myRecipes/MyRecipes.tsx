@@ -15,7 +15,7 @@ const MyRecipes = () => {
   } = useFetch<IRecipe[]>(recipeServiceParams.getAllById());
 
   if (loading) {
-    return <MuiLoading>Cargando Receta</MuiLoading>;
+    return <MuiLoading>Cargando Recetas</MuiLoading>;
   }
 
   if (error) {
