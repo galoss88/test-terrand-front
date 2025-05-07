@@ -1,3 +1,4 @@
+import { StyledText } from "@/pages/auth/styles";
 import { Button, ButtonProps, styled, useTheme } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router";
@@ -52,7 +53,9 @@ export const LoadingButton: React.FC<
       isLoading={isLoading}
       loadingText={loadingText}
     >
-      {isLoading ? loadingText : textWhenNotLoading}
+      <StyledText sx={{ marginBottom: 0 }}>
+        {isLoading ? loadingText : textWhenNotLoading}
+      </StyledText>
     </StyledButton>
   );
 };

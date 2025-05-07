@@ -1,14 +1,30 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
+import { Box } from "@mui/material";
 
 const Layout = () => {
   return (
-    <>
+    <Box sx={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #F4F1DE 0%, #F8F8F0 100%)',
+      backgroundAttachment: 'fixed',
+    }}>
       <Header />
-      <main>
+      <Box 
+        component="main"
+        sx={{ 
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          padding: { xs: 1, sm: 2, md: 3 },
+          overflowX: 'hidden',
+        }}
+      >
         <Outlet />
-      </main>
-    </>
+      </Box>
+    </Box>
   );
 };
 
